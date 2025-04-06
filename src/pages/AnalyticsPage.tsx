@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BalanceOverview } from '@/components/analytics/BalanceOverview';
 import { SpendingByUpi } from '@/components/analytics/SpendingByUpi';
 import { mockBalanceData, mockCurrentBalance, mockSpendingByUpi, mockTransactions } from '@/utils/mock-data';
-import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, Layers, Calendar, Tag, Pie } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, Layers, Calendar, Tag, PieChart } from 'lucide-react';
 
 const AnalyticsPage = () => {
   // Calculate total incoming/outgoing
@@ -92,7 +91,7 @@ const AnalyticsPage = () => {
             <Card className="card-hover bg-gradient-to-r from-flexipay-light-purple/50 to-white border-flexipay-purple/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center">
-                  <Pie className="h-5 w-5 mr-2 text-flexipay-purple" />
+                  <PieChart className="h-5 w-5 mr-2 text-flexipay-purple" />
                   Spending by UPI ID
                 </CardTitle>
               </CardHeader>
