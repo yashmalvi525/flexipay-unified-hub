@@ -107,4 +107,44 @@
   .btn-secondary {
     @apply bg-flexipay-blue text-white hover:opacity-90 transition-opacity;
   }
+  
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-flexipay-purple to-flexipay-blue bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-flexipay-purple to-flexipay-blue;
+  }
+  
+  .card-glass {
+    @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-lg;
+  }
+  
+  .card-animated {
+    @apply transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1;
+  }
+  
+  .pulse-dot {
+    @apply relative;
+  }
+  
+  .pulse-dot::after {
+    @apply content-[''] absolute -right-1 -top-1 w-3 h-3 bg-green-500 rounded-full animate-pulse;
+  }
+  
+  .shimmer {
+    @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
