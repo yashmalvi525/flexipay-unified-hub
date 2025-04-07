@@ -28,7 +28,7 @@ const HistoryPage = () => {
           <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-purple/5 rounded-full blur-xl"></div>
           
           <CardContent className="p-3 sm:p-4 md:p-6 relative">
-            <TransactionHistory transactions={mockTransactions} />
+            <TransactionHistory transactions={mockTransactions} showFullDetails={true} />
           </CardContent>
         </Card>
       </div>
