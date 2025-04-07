@@ -13,6 +13,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarProvider, SidebarTrigger 
 } from '@/components/ui/sidebar';
+import { BottomNav } from './BottomNav';
 
 const sidebarItems = [
   { title: "Dashboard", icon: Home, href: "/" },
@@ -83,11 +84,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </SidebarTrigger>
-            <main className="pt-2">
+            <main className="pt-2 pb-16 md:pb-0">
               {children}
             </main>
           </div>
         </div>
+        <BottomNav />
       </div>
     </SidebarProvider>
   );

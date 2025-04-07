@@ -4,25 +4,23 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UpiCard } from '@/components/upi/UpiCard';
-import { TransactionCard } from '@/components/transactions/TransactionCard';
+import { TransactionHistory } from '@/components/transactions/TransactionHistory';
 import { BalanceOverview } from '@/components/analytics/BalanceOverview';
 import { mockUpiIds, mockTransactions, mockBalanceData, mockCurrentBalance } from '@/utils/mock-data';
 import { CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  // Get the latest 3 transactions for the dashboard
-  const recentTransactions = mockTransactions.slice(0, 3);
-  
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Welcome to <span className="text-flexipay-purple">Flexi</span><span className="text-flexipay-blue">Pay</span></h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Welcome to <span className="text-flexipay-purple">Flexi</span><span className="text-flexipay-blue">Pay</span></h1>
       </div>
       
       <Card className="bg-gradient-to-r from-flexipay-light-purple to-flexipay-purple/5 border-flexipay-purple/20 overflow-hidden relative">
         <div className="absolute -right-16 -top-16 w-48 h-48 bg-flexipay-purple/10 rounded-full blur-xl"></div>
         <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-blue/10 rounded-full blur-xl"></div>
-        <CardContent className="p-6 relative">
+        <CardContent className="p-4 md:p-6 relative">
           <BalanceOverview balanceData={mockBalanceData} currentBalance={mockCurrentBalance} />
         </CardContent>
       </Card>
@@ -37,23 +35,23 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="space-y-2">
             <Button className="w-full bg-gradient-to-r from-flexipay-purple to-flexipay-blue text-white hover:opacity-90" asChild>
-              <a href="/scan">
+              <Link to="/scan">
                 <QrCode className="h-4 w-4 mr-2" />
                 <span>Scan QR</span>
-              </a>
+              </Link>
             </Button>
             <div className="grid grid-cols-2 gap-2">
               <Button variant="outline" className="border-flexipay-purple/30 hover:bg-flexipay-purple/10" asChild>
-                <a href="/upi">
+                <Link to="/upi">
                   <ArrowUpRight className="h-4 w-4 mr-2 text-flexipay-purple" />
                   <span>Pay</span>
-                </a>
+                </Link>
               </Button>
               <Button variant="outline" className="border-flexipay-blue/30 hover:bg-flexipay-blue/10" asChild>
-                <a href="/upi">
+                <Link to="/upi">
                   <ArrowDownLeft className="h-4 w-4 mr-2 text-flexipay-blue" />
                   <span>Request</span>
-                </a>
+                </Link>
               </Button>
             </div>
           </CardContent>
@@ -67,10 +65,10 @@ const Dashboard = () => {
                 <span>My UPI IDs</span>
               </div>
               <Button size="sm" variant="outline" className="border-flexipay-purple/30 hover:bg-flexipay-purple/10" asChild>
-                <a href="/upi">
+                <Link to="/upi">
                   <Plus className="h-4 w-4 mr-1" />
                   <span>Add</span>
-                </a>
+                </Link>
               </Button>
             </CardTitle>
           </CardHeader>
@@ -88,7 +86,7 @@ const Dashboard = () => {
               ))}
             </div>
             <Button variant="ghost" size="sm" className="w-full text-flexipay-purple hover:text-flexipay-purple/80 hover:bg-flexipay-purple/10" asChild>
-              <a href="/upi">View all UPI IDs</a>
+              <Link to="/upi">View all UPI IDs</Link>
             </Button>
           </CardContent>
         </Card>
@@ -100,14 +98,12 @@ const Dashboard = () => {
             <CardTitle className="text-lg flex items-center justify-between">
               <span>Recent Transactions</span>
               <Button variant="ghost" size="sm" className="text-flexipay-purple hover:text-flexipay-purple/80 hover:bg-flexipay-purple/10" asChild>
-                <a href="/history">View All</a>
+                <Link to="/history">View All</Link>
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {recentTransactions.map(transaction => (
-              <TransactionCard key={transaction.id} transaction={transaction} />
-            ))}
+            <TransactionHistory transactions={mockTransactions} compactView={true} />
           </CardContent>
         </Card>
         
@@ -140,9 +136,9 @@ const Dashboard = () => {
             </div>
             
             <Button className="w-full bg-gradient-to-r from-flexipay-blue to-flexipay-purple text-white hover:opacity-90" asChild>
-              <a href="/analytics">
+              <Link to="/analytics">
                 <span>Full Analytics</span>
-              </a>
+              </Link>
             </Button>
           </CardContent>
         </Card>

@@ -17,9 +17,13 @@ import {
 
 interface TransactionHistoryProps {
   transactions: Transaction[];
+  compactView?: boolean;
 }
 
-export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transactions }) => {
+export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ 
+  transactions,
+  compactView = false 
+}) => {
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [upiFilter, setUpiFilter] = useState<string | null>(null);
@@ -62,6 +66,34 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transact
     setSearchQuery('');
   };
 
+  // Display only basic filter and fewer transactions in compact view
+  if (compactView) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium">Recent Transactions</h2>
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-[130px] bg-white">
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="incoming">Received</SelectItem>
+              <SelectItem value="outgoing">Sent</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="space-y-3">
+          {filteredTransactions.slice(0, 5).map(transaction => (
+            <TransactionCard key={transaction.id} transaction={transaction} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Full transaction history view
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
@@ -147,12 +179,12 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transact
         </div>
       )}
 
-      <Tabs defaultValue="all">
-        <TabsList className="bg-gradient-to-r from-flexipay-purple/10 to-flexipay-blue/10 p-1">
-          <TabsTrigger value="all" className="data-[state=active]:bg-white">All</TabsTrigger>
-          <TabsTrigger value="today" className="data-[state=active]:bg-white">Today</TabsTrigger>
-          <TabsTrigger value="week" className="data-[state=active]:bg-white">This Week</TabsTrigger>
-          <TabsTrigger value="month" className="data-[state=active]:bg-white">This Month</TabsTrigger>
+      <Tabs defaultValue="all" className="w-full">
+        <TabsList className="bg-gradient-to-r from-flexipay-purple/10 to-flexipay-blue/10 p-1 w-full">
+          <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-white">All</TabsTrigger>
+          <TabsTrigger value="today" className="flex-1 data-[state=active]:bg-white">Today</TabsTrigger>
+          <TabsTrigger value="week" className="flex-1 data-[state=active]:bg-white">Week</TabsTrigger>
+          <TabsTrigger value="month" className="flex-1 data-[state=active]:bg-white">Month</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4 pt-4">
           {filteredTransactions.length > 0 ? (
