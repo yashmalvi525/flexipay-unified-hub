@@ -12,6 +12,14 @@ import HistoryPage from "./pages/HistoryPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
+import ContactsPage from "./pages/ContactsPage";
+import PayPhonePage from "./pages/PayPhonePage";
+import BankTransferPage from "./pages/BankTransferPage";
+import PayUpiPage from "./pages/PayUpiPage";
+import SelfTransferPage from "./pages/SelfTransferPage";
+import PayBillsPage from "./pages/PayBillsPage";
+import MobileRechargePage from "./pages/MobileRechargePage";
+import CheckBalancePage from "./pages/CheckBalancePage";
 
 const queryClient = new QueryClient();
 
@@ -29,13 +37,14 @@ const App = () => (
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/contacts" element={<ScanPage />} />
-            <Route path="/pay-phone" element={<ScanPage />} />
-            <Route path="/bank-transfer" element={<ScanPage />} />
-            <Route path="/pay-upi" element={<ScanPage />} />
-            <Route path="/self-transfer" element={<ScanPage />} />
-            <Route path="/pay-bills" element={<ScanPage />} />
-            <Route path="/mobile-recharge" element={<ScanPage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
+            <Route path="/pay-phone" element={<PayPhonePage />} />
+            <Route path="/bank-transfer" element={<BankTransferPage />} />
+            <Route path="/pay-upi" element={<PayUpiPage />} />
+            <Route path="/self-transfer" element={<SelfTransferPage />} />
+            <Route path="/pay-bills" element={<PayBillsPage />} />
+            <Route path="/mobile-recharge" element={<MobileRechargePage />} />
+            <Route path="/check-balance" element={<CheckBalancePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
