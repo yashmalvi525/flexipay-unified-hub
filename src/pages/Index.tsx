@@ -7,8 +7,73 @@ import { UpiCard } from '@/components/upi/UpiCard';
 import { TransactionHistory } from '@/components/transactions/TransactionHistory';
 import { BalanceOverview } from '@/components/analytics/BalanceOverview';
 import { mockUpiIds, mockTransactions, mockBalanceData, mockCurrentBalance } from '@/utils/mock-data';
-import { CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap } from 'lucide-react';
+import { 
+  CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap,
+  Phone, Users, Bank, Receipt, Smartphone, RefreshCw, AtSign
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const QuickPaymentOptions = () => {
+  return (
+    <div className="grid grid-cols-4 gap-2 mb-6">
+      <Link to="/scan" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-blue/10 flex items-center justify-center mb-1">
+          <QrCode className="h-5 w-5 text-flexipay-blue" />
+        </div>
+        <span className="text-xs">Scan any QR</span>
+      </Link>
+      
+      <Link to="/contacts" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-purple/10 flex items-center justify-center mb-1">
+          <Users className="h-5 w-5 text-flexipay-purple" />
+        </div>
+        <span className="text-xs">Pay contacts</span>
+      </Link>
+      
+      <Link to="/pay-phone" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-blue/10 flex items-center justify-center mb-1">
+          <Phone className="h-5 w-5 text-flexipay-blue" />
+        </div>
+        <span className="text-xs">Pay phone</span>
+      </Link>
+      
+      <Link to="/bank-transfer" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-purple/10 flex items-center justify-center mb-1">
+          <Bank className="h-5 w-5 text-flexipay-purple" />
+        </div>
+        <span className="text-xs">Bank transfer</span>
+      </Link>
+      
+      <Link to="/pay-upi" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-blue/10 flex items-center justify-center mb-1">
+          <AtSign className="h-5 w-5 text-flexipay-blue" />
+        </div>
+        <span className="text-xs">Pay UPI ID</span>
+      </Link>
+      
+      <Link to="/self-transfer" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-purple/10 flex items-center justify-center mb-1">
+          <RefreshCw className="h-5 w-5 text-flexipay-purple" />
+        </div>
+        <span className="text-xs">Self transfer</span>
+      </Link>
+      
+      <Link to="/pay-bills" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-blue/10 flex items-center justify-center mb-1">
+          <Receipt className="h-5 w-5 text-flexipay-blue" />
+        </div>
+        <span className="text-xs">Pay bills</span>
+      </Link>
+      
+      <Link to="/mobile-recharge" className="flex flex-col items-center text-center">
+        <div className="h-12 w-12 rounded-full bg-flexipay-purple/10 flex items-center justify-center mb-1">
+          <Smartphone className="h-5 w-5 text-flexipay-purple" />
+        </div>
+        <span className="text-xs">Mobile recharge</span>
+      </Link>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   return (
@@ -24,6 +89,8 @@ const Dashboard = () => {
           <BalanceOverview balanceData={mockBalanceData} currentBalance={mockCurrentBalance} />
         </CardContent>
       </Card>
+      
+      <QuickPaymentOptions />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="col-span-1 card-hover bg-gradient-to-br from-white to-flexipay-light-purple border-flexipay-purple/10">
