@@ -9,7 +9,7 @@ import { BalanceOverview } from '@/components/analytics/BalanceOverview';
 import { mockUpiIds, mockTransactions, mockBalanceData, mockCurrentBalance } from '@/utils/mock-data';
 import { 
   CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap,
-  Phone, Users, Bank, Receipt, Smartphone, RefreshCw, AtSign
+  Phone, Users, Building, Receipt, Smartphone, RefreshCw, AtSign
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const QuickPaymentOptions = () => {
       
       <Link to="/bank-transfer" className="flex flex-col items-center text-center">
         <div className="h-12 w-12 rounded-full bg-flexipay-purple/10 flex items-center justify-center mb-1">
-          <Bank className="h-5 w-5 text-flexipay-purple" />
+          <Building className="h-5 w-5 text-flexipay-purple" />
         </div>
         <span className="text-xs">Bank transfer</span>
       </Link>
