@@ -4,6 +4,7 @@
   "short_name": "FlexiPay",
   "description": "Fast and secure UPI payments",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#f8f9fa",
   "theme_color": "#7c3aed",
@@ -21,6 +22,20 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "shortcuts": [

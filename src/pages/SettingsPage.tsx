@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ModeToggle } from '@/components/theme/ModeToggle';
-import { AlertTriangle, Download, Smartphone, Check, X, UserPlus, Info } from 'lucide-react';
+import { AlertTriangle, Download, Smartphone, Check, X, UserPlus, Info, Share } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { isPWAInstallable, installPWA, checkIfPWAInstalled, requestContactsAccess } from '@/utils/pwa-utils';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const SettingsPage = () => {
   const { toast } = useToast();
@@ -16,57 +16,71 @@ const SettingsPage = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [hasContactsPermission, setHasContactsPermission] = useState(false);
   const [installButtonClicked, setInstallButtonClicked] = useState(false);
+  const [showIOSInstructions, setShowIOSInstructions] = useState(false);
+
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
 
   useEffect(() => {
+    setShowIOSInstructions(isIOS);
+    
     const checkInstallState = () => {
       const installable = isPWAInstallable();
       const installed = checkIfPWAInstalled();
       
-      console.log('PWA status check:', { installable, installed });
-      setIsInstallable(installable);
+      console.log('PWA status check:', { installable, installed, isIOS });
+      setIsInstallable(installable || isIOS);
       setIsInstalled(installed);
     };
 
     checkInstallState();
     
-    // Re-check when visibility changes (user might have installed the app)
     document.addEventListener('visibilitychange', checkInstallState);
     
-    // Listen for custom events from pwa-utils
-    document.addEventListener('pwaInstallable', () => {
+    const handleInstallable = () => {
       console.log('PWA is installable event received');
       setIsInstallable(true);
-    });
+    };
     
-    document.addEventListener('pwaInstalled', () => {
+    const handleInstalled = () => {
       console.log('PWA installed event received');
       setIsInstalled(true);
-    });
+      setInstallButtonClicked(false);
+    };
     
-    // Check for contacts permission
+    document.addEventListener('pwaInstallable', handleInstallable);
+    document.addEventListener('pwaInstalled', handleInstalled);
+    
     const checkContactsPermission = async () => {
-      // In a real app, we would check if permission was already granted
-      // For this demo, we'll just assume it's not granted initially
       setHasContactsPermission(false);
     };
     
     checkContactsPermission();
     
-    // Immediately check if installable on component mount
     setTimeout(checkInstallState, 1000);
     
     return () => {
       document.removeEventListener('visibilitychange', checkInstallState);
-      document.removeEventListener('pwaInstallable', () => setIsInstallable(true));
-      document.removeEventListener('pwaInstalled', () => setIsInstalled(true));
+      document.removeEventListener('pwaInstallable', handleInstallable);
+      document.removeEventListener('pwaInstalled', handleInstalled);
     };
-  }, []);
+  }, [isIOS]);
 
   const handleInstallClick = async () => {
     console.log('Install button clicked');
     setInstallButtonClicked(true);
     
     try {
+      if (isIOS) {
+        setShowIOSInstructions(true);
+        toast({
+          title: "Installation Instructions",
+          description: "Tap the share button and select 'Add to Home Screen'",
+          duration: 6000,
+        });
+        setTimeout(() => setInstallButtonClicked(false), 1000);
+        return;
+      }
+      
       const installed = await installPWA();
       console.log('Installation result:', installed);
       
@@ -77,20 +91,11 @@ const SettingsPage = () => {
         });
         setIsInstalled(true);
       } else {
-        // For iOS devices, we show a specific toast
-        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-          toast({
-            title: "Installation Instructions",
-            description: "Tap the share button and select 'Add to Home Screen'",
-            duration: 6000,
-          });
-        } else {
-          toast({
-            title: "Installation not completed",
-            description: "You can install the app later from settings",
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Installation not completed",
+          description: "You can install the app later from settings",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Error installing PWA:', error);
@@ -100,7 +105,6 @@ const SettingsPage = () => {
         variant: "destructive",
       });
     } finally {
-      // Reset button clicked state after a delay
       setTimeout(() => setInstallButtonClicked(false), 2000);
     }
   };
@@ -122,9 +126,6 @@ const SettingsPage = () => {
       });
     }
   };
-
-  // Detect if user is on iOS
-  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
 
   return (
     <AppLayout>
@@ -153,7 +154,6 @@ const SettingsPage = () => {
           </CardContent>
         </Card>
         
-        {/* PWA Installation Card */}
         <Card className={isInstalled ? "border-green-500 dark:border-green-700" : "border-flexipay-purple/30"}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -165,20 +165,27 @@ const SettingsPage = () => {
               Install FlexiPay on your device for faster access
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             {isInstalled ? (
               <div className="flex items-center p-2 bg-green-50 dark:bg-green-900/20 rounded-md text-sm">
                 <Check className="h-4 w-4 text-green-500 mr-2" />
                 <span>FlexiPay is installed on your device</span>
               </div>
-            ) : isIOS ? (
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-start p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md text-sm">
-                  <Info className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>On iOS: Tap the share button and select "Add to Home Screen" to install FlexiPay.</span>
-                </div>
-                <div className="flex justify-center">
-                  <svg className="w-6 h-6 text-gray-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            ) : showIOSInstructions ? (
+              <div className="flex flex-col space-y-3">
+                <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
+                  <Info className="h-4 w-4 text-blue-500" />
+                  <AlertDescription className="text-sm">
+                    On iOS, follow these steps to install:
+                  </AlertDescription>
+                </Alert>
+                <ol className="space-y-2 pl-5 list-decimal text-sm">
+                  <li>Tap the <Share className="h-4 w-4 inline mx-1" /> share button in your browser</li>
+                  <li>Scroll down and select <strong>"Add to Home Screen"</strong></li>
+                  <li>Tap <strong>"Add"</strong> in the top-right corner</li>
+                </ol>
+                <div className="flex justify-center pt-2">
+                  <svg className="w-6 h-6 text-blue-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
                 </div>
@@ -191,19 +198,25 @@ const SettingsPage = () => {
           </CardContent>
           <CardFooter>
             <Button 
-              className={`w-full ${isInstalled ? "bg-green-500 hover:bg-green-600" : "bg-flexipay-purple hover:bg-flexipay-purple/90"} relative`}
+              className={`w-full relative ${
+                isInstalled 
+                  ? "bg-green-500 hover:bg-green-600" 
+                  : "bg-flexipay-purple hover:bg-flexipay-purple/90"
+              }`}
               onClick={handleInstallClick}
-              disabled={(!isInstallable && !isIOS) || isInstalled || installButtonClicked}
+              disabled={isInstalled || (installButtonClicked && !isIOS)}
             >
               {installButtonClicked ? (
                 <>
-                  <span className="animate-pulse">Installing...</span>
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  </span>
+                  <span className="animate-pulse">{isIOS ? "See Instructions Above" : "Installing..."}</span>
+                  {!isIOS && (
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </span>
+                  )}
                 </>
               ) : (
                 <>
@@ -215,7 +228,6 @@ const SettingsPage = () => {
           </CardFooter>
         </Card>
         
-        {/* Contacts Access Card */}
         <Card className={hasContactsPermission ? "border-green-500 dark:border-green-700" : "border-flexipay-purple/30"}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

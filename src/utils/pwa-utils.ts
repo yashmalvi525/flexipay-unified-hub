@@ -40,35 +40,52 @@ export const setupPWAInstallPrompt = (): void => {
     // Optionally, notify the application that the app was installed
     document.dispatchEvent(new CustomEvent('pwaInstalled', { detail: true }));
   });
+
+  // For debug purposes
+  console.log('PWA display mode:', window.matchMedia('(display-mode: standalone)').matches ? 'standalone' : 'browser');
+  console.log('iOS standalone:', (window.navigator as any).standalone);
 };
 
 export const isPWAInstallable = (): boolean => {
-  console.log('Checking if PWA is installable:', !!deferredPrompt);
-  return !!deferredPrompt;
+  const isStandalone = checkIfPWAInstalled();
+  const hasInstallPrompt = !!deferredPrompt;
+  
+  console.log('PWA installability check:', { 
+    isStandalone, 
+    hasInstallPrompt,
+    userAgent: navigator.userAgent
+  });
+  
+  // For iOS, we'll always say it's installable since they use a different method
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    return !isStandalone; // If not already installed
+  }
+  
+  return hasInstallPrompt && !isStandalone;
 };
 
 export const installPWA = async (): Promise<boolean> => {
-  console.log('Attempting to install PWA');
+  console.log('Attempting to install PWA', { deferredPrompt });
   
-  // Check if the app can be installed
+  // For iOS devices, show special instructions
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    console.log('iOS device detected, showing manual installation instructions');
+    return true; // Return true so the UI can show iOS-specific instructions
+  }
+  
+  // Check if the app can be installed via standard method
   if (!deferredPrompt) {
     console.log('No install prompt available');
     
-    // For iOS devices, which don't support the standard install prompt
-    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-      return false;
-    }
-    
-    // For browsers that don't support the beforeinstallprompt event
+    // For browsers that don't support the beforeinstallprompt event but have service workers
     if ('serviceWorker' in navigator) {
-      console.log('Trying alternative installation method');
+      console.log('Service Worker supported, checking registration');
       try {
         // Check if service worker is registered
         const registrations = await navigator.serviceWorker.getRegistrations();
         if (registrations.length > 0) {
-          console.log('Service worker is registered, app may be installable');
-          alert('Add to Home Screen: In Safari, tap the Share button and select "Add to Home Screen". In Chrome, tap the menu button and select "Add to Home Screen".');
-          return true;
+          console.log('Service worker is registered:', registrations);
+          return true; // Allow showing installation instructions
         }
       } catch (err) {
         console.error('Error checking service worker registration:', err);

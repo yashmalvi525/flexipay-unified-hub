@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'flexipay-v1';
+const CACHE_NAME = 'flexipay-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -48,6 +48,11 @@ self.addEventListener('fetch', (event) => {
                 cache.put(event.request, responseToCache);
               });
             return response;
+          })
+          .catch((err) => {
+            // If fetch fails (e.g., offline), try to return a cached fallback
+            console.log('Fetch failed; returning offline page instead.', err);
+            return caches.match('/');
           });
       })
   );
@@ -87,4 +92,47 @@ self.addEventListener('message', (event) => {
       });
     });
   }
+});
+
+// Handle push notifications (for future use)
+self.addEventListener('push', (event) => {
+  console.log('Push received:', event);
+  
+  const data = event.data?.json() ?? { title: 'New Notification', body: 'You have a new notification' };
+  
+  const options = {
+    body: data.body,
+    icon: '/icon-192x192.png',
+    badge: '/icon-192x192.png',
+    vibrate: [100, 50, 100],
+    data: {
+      url: data.url || '/'
+    }
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  
+  const url = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    clients.matchAll({type: 'window'}).then(windowClients => {
+      // Check if there is already a window open with the URL
+      for (let client of windowClients) {
+        if (client.url === url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // If not, open a new window
+      if (clients.openWindow) {
+        return clients.openWindow(url);
+      }
+    })
+  );
 });
