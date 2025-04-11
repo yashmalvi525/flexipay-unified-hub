@@ -88,10 +88,34 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
+    touch-action: manipulation;
   }
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improve button/tap feel on mobile */
+  button, a {
+    touch-action: manipulation;
+  }
+
+  /* Make inputs feel more app-like */
+  input, textarea {
+    appearance: none;
+    -webkit-appearance: none;
   }
 }
 
@@ -135,6 +159,21 @@
   .shimmer {
     @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
   }
+
+  /* Mobile app-like tap feedback */
+  .tap-highlight {
+    @apply active:bg-gray-100 active:dark:bg-gray-800 transition-colors duration-100;
+  }
+  
+  /* Table tweaks for mobile */
+  .mobile-table {
+    @apply text-sm;
+  }
+  
+  .mobile-table th, 
+  .mobile-table td {
+    @apply py-2 px-2;
+  }
 }
 
 @keyframes shimmer {
@@ -146,5 +185,18 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  .mobile-fixed {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior-y: none;
   }
 }
