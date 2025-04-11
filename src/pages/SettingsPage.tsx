@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ModeToggle } from '@/components/theme/ModeToggle';
-import { AlertTriangle, Download, Smartphone, Check, X, UserPlus } from 'lucide-react';
+import { AlertTriangle, Download, Smartphone, Check, X, UserPlus, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { isPWAInstallable, installPWA, checkIfPWAInstalled, requestContactsAccess } from '@/utils/pwa-utils';
 
@@ -15,17 +15,33 @@ const SettingsPage = () => {
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [hasContactsPermission, setHasContactsPermission] = useState(false);
+  const [installButtonClicked, setInstallButtonClicked] = useState(false);
 
   useEffect(() => {
     const checkInstallState = () => {
-      setIsInstallable(isPWAInstallable());
-      setIsInstalled(checkIfPWAInstalled());
+      const installable = isPWAInstallable();
+      const installed = checkIfPWAInstalled();
+      
+      console.log('PWA status check:', { installable, installed });
+      setIsInstallable(installable);
+      setIsInstalled(installed);
     };
 
     checkInstallState();
     
     // Re-check when visibility changes (user might have installed the app)
     document.addEventListener('visibilitychange', checkInstallState);
+    
+    // Listen for custom events from pwa-utils
+    document.addEventListener('pwaInstallable', () => {
+      console.log('PWA is installable event received');
+      setIsInstallable(true);
+    });
+    
+    document.addEventListener('pwaInstalled', () => {
+      console.log('PWA installed event received');
+      setIsInstalled(true);
+    });
     
     // Check for contacts permission
     const checkContactsPermission = async () => {
@@ -36,25 +52,56 @@ const SettingsPage = () => {
     
     checkContactsPermission();
     
+    // Immediately check if installable on component mount
+    setTimeout(checkInstallState, 1000);
+    
     return () => {
       document.removeEventListener('visibilitychange', checkInstallState);
+      document.removeEventListener('pwaInstallable', () => setIsInstallable(true));
+      document.removeEventListener('pwaInstalled', () => setIsInstalled(true));
     };
   }, []);
 
   const handleInstallClick = async () => {
-    const installed = await installPWA();
-    if (installed) {
+    console.log('Install button clicked');
+    setInstallButtonClicked(true);
+    
+    try {
+      const installed = await installPWA();
+      console.log('Installation result:', installed);
+      
+      if (installed) {
+        toast({
+          title: "App installed successfully",
+          description: "FlexiPay has been added to your home screen",
+        });
+        setIsInstalled(true);
+      } else {
+        // For iOS devices, we show a specific toast
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+          toast({
+            title: "Installation Instructions",
+            description: "Tap the share button and select 'Add to Home Screen'",
+            duration: 6000,
+          });
+        } else {
+          toast({
+            title: "Installation not completed",
+            description: "You can install the app later from settings",
+            variant: "destructive",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error installing PWA:', error);
       toast({
-        title: "App installed successfully",
-        description: "FlexiPay has been added to your home screen",
-      });
-      setIsInstalled(true);
-    } else {
-      toast({
-        title: "Installation cancelled",
-        description: "You can install the app later from settings",
+        title: "Installation failed",
+        description: "Please try again later",
         variant: "destructive",
       });
+    } finally {
+      // Reset button clicked state after a delay
+      setTimeout(() => setInstallButtonClicked(false), 2000);
     }
   };
 
@@ -75,6 +122,9 @@ const SettingsPage = () => {
       });
     }
   };
+
+  // Detect if user is on iOS
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
 
   return (
     <AppLayout>
@@ -121,6 +171,18 @@ const SettingsPage = () => {
                 <Check className="h-4 w-4 text-green-500 mr-2" />
                 <span>FlexiPay is installed on your device</span>
               </div>
+            ) : isIOS ? (
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-start p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md text-sm">
+                  <Info className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>On iOS: Tap the share button and select "Add to Home Screen" to install FlexiPay.</span>
+                </div>
+                <div className="flex justify-center">
+                  <svg className="w-6 h-6 text-gray-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                </div>
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground">
                 Add FlexiPay to your home screen for a better experience and offline access.
@@ -129,12 +191,26 @@ const SettingsPage = () => {
           </CardContent>
           <CardFooter>
             <Button 
-              className="w-full bg-flexipay-purple hover:bg-flexipay-purple/90"
+              className={`w-full ${isInstalled ? "bg-green-500 hover:bg-green-600" : "bg-flexipay-purple hover:bg-flexipay-purple/90"} relative`}
               onClick={handleInstallClick}
-              disabled={!isInstallable || isInstalled}
+              disabled={(!isInstallable && !isIOS) || isInstalled || installButtonClicked}
             >
-              <Download className="h-4 w-4 mr-2" />
-              {isInstalled ? "Already Installed" : "Install App"}
+              {installButtonClicked ? (
+                <>
+                  <span className="animate-pulse">Installing...</span>
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Download className="h-4 w-4 mr-2" />
+                  {isInstalled ? "Already Installed" : isIOS ? "Add to Home Screen" : "Install App"}
+                </>
+              )}
             </Button>
           </CardFooter>
         </Card>
