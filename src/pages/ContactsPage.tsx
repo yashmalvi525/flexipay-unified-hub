@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -99,7 +100,7 @@ const ContactsPage = () => {
 
   return (
     <AppLayout>
-      <div className="space-y-6 animate-fade-in pb-6">
+      <div className="space-y-6 animate-fade-in pb-6 max-w-5xl mx-auto">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-2 text-gradient-primary">Pay Contacts</h1>
           <p className="text-muted-foreground">Send money to your contacts</p>
@@ -113,7 +114,7 @@ const ContactsPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input 
@@ -141,7 +142,7 @@ const ContactsPage = () => {
               </div>
             )}
             
-            <div className="rounded-md border dark:border-gray-700 overflow-hidden">
+            <div className="rounded-md border dark:border-gray-700 overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="dark:bg-gray-800 dark:hover:bg-gray-700">

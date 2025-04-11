@@ -9,7 +9,7 @@ import { Tag } from 'lucide-react';
 const HistoryPage = () => {
   return (
     <AppLayout>
-      <div className="space-y-4 sm:space-y-6 animate-fade-in">
+      <div className="space-y-4 sm:space-y-6 animate-fade-in max-w-5xl mx-auto">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl sm:text-3xl font-bold">
             <span className="text-gradient-primary">
@@ -28,7 +28,9 @@ const HistoryPage = () => {
           <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-purple/5 rounded-full blur-xl"></div>
           
           <CardContent className="p-3 sm:p-4 md:p-6 relative">
-            <TransactionHistory transactions={mockTransactions} showFullDetails={true} />
+            <div className="overflow-x-auto">
+              <TransactionHistory transactions={mockTransactions} showFullDetails={true} />
+            </div>
           </CardContent>
         </Card>
       </div>
