@@ -20,12 +20,12 @@ export function ModeToggle() {
       variant="outline"
       size="sm"
       onClick={toggleTheme}
-      className="border-muted-foreground/20 hover:bg-muted dark:text-foreground"
+      className="border-muted-foreground/20 hover:bg-muted dark:border-gray-700 dark:hover:bg-gray-800"
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5 text-yellow-400" />
       ) : (
-        <Moon className="h-5 w-5 text-indigo-700" />
+        <Moon className="h-5 w-5 text-indigo-700 dark:text-indigo-400" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

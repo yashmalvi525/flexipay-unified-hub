@@ -62,7 +62,7 @@
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 74.9%;
 
     --accent: 240 10% 15%;
     --accent-foreground: 0 0% 98%;
@@ -170,11 +170,11 @@
   }
   
   .provider-logo {
-    @apply flex items-center justify-center h-6 w-6 rounded-full shrink-0 overflow-hidden;
+    @apply flex items-center justify-center h-6 w-6 rounded-full shrink-0 overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700;
   }
   
   .dark .card-hover {
-    @apply hover:bg-foreground/5;
+    @apply hover:bg-gray-800;
   }
   
   .dark .bg-gradient-primary {
@@ -182,7 +182,46 @@
   }
   
   .dark .card-glass {
-    @apply bg-foreground/5 border-white/10;
+    @apply bg-gray-900/60 border-gray-700/50;
+  }
+
+  /* Improved UPI card styling */
+  .upi-card {
+    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 transition-all;
+  }
+
+  .upi-card-default {
+    @apply bg-gradient-to-br from-flexipay-light-purple to-white dark:from-flexipay-purple/20 dark:to-gray-800 border-flexipay-purple/30 dark:border-flexipay-purple/50;
+  }
+
+  /* Transaction card improvements */
+  .transaction-card {
+    @apply bg-white dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden;
+  }
+  
+  .transaction-sent {
+    @apply border-l-4 border-l-red-500 dark:border-l-red-600;
+  }
+  
+  .transaction-received {
+    @apply border-l-4 border-l-green-500 dark:border-l-green-600;
+  }
+
+  /* Provider logo improvements */
+  .provider-logo-gpay {
+    @apply bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400;
+  }
+  
+  .provider-logo-phonepe {
+    @apply bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400;
+  }
+  
+  .provider-logo-paytm {
+    @apply bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400;
+  }
+  
+  .provider-logo-bhim {
+    @apply bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400;
   }
 }
 
@@ -218,5 +257,31 @@
   
   .no-zoom {
     touch-action: pan-x pan-y;
+  }
+
+  /* Add better text contrast utilities */
+  .dark-text-enhanced {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+  
+  .dark-text-secondary {
+    @apply text-gray-700 dark:text-gray-300;
+  }
+  
+  .dark-text-muted {
+    @apply text-gray-500 dark:text-gray-400;
+  }
+
+  /* Add better logo alignment utilities */
+  .logo-center {
+    @apply flex items-center justify-center;
+  }
+  
+  .logo-align-left {
+    @apply flex items-center justify-start;
+  }
+  
+  .align-text-icon {
+    @apply inline-flex items-center;
   }
 }

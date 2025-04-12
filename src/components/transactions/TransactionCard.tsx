@@ -59,8 +59,8 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
   const isMobile = useIsMobile();
   const isIncoming = type === 'incoming';
   const Icon = isIncoming ? ArrowDownLeft : ArrowUpRight;
-  const amountColor = isIncoming ? 'text-green-500' : 'text-red-500';
-  const amountColorDark = isIncoming ? 'dark:text-green-400' : 'dark:text-red-400';
+  const amountColor = isIncoming ? 'text-green-600' : 'text-red-600';
+  const amountColorDark = isIncoming ? 'dark:text-green-500' : 'dark:text-red-500';
   const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true });
   
   // Use either new fields or fallback to old fields for backward compatibility
@@ -138,19 +138,21 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
           </div>
         );
       default:
-        return <Smartphone className="h-3 w-3 text-muted-foreground" />;
+        return <Smartphone className="h-3 w-3 text-muted-foreground dark:text-gray-400" />;
     }
   };
 
+  const cardClass = `card-hover ${isIncoming ? 'transaction-received' : 'transaction-sent'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mb-3`;
+
   return (
-    <Card className="card-hover bg-gradient-to-r from-white to-gray-50 border-gray-200/80 dark:from-gray-800 dark:to-gray-900 dark:border-gray-700 mb-3">
+    <Card className={cardClass}>
       <CardContent className="p-3 sm:p-4">
         <div className="flex items-start sm:items-center space-x-3">
           <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center ${getIconBg()}`}>
             <Icon className={`h-5 w-5 ${
               isIncoming 
-                ? 'text-green-500 dark:text-green-400' 
-                : 'text-red-500 dark:text-red-400'
+                ? 'text-green-600 dark:text-green-500' 
+                : 'text-red-600 dark:text-red-500'
             }`} />
           </div>
           
@@ -183,21 +185,21 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
             </div>
             
             {isMobile && (displaySenderUpiId || displayReceiverUpiId) && (
-              <div className="mt-0.5 text-[10px] text-muted-foreground overflow-hidden">
+              <div className="mt-0.5 text-[10px] text-muted-foreground dark:text-gray-400 overflow-hidden">
                 {displaySenderUpiId && <span className="mr-1 truncate">{displaySenderUpiId}</span>}
-                {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1">→</span>}
+                {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1 dark:text-gray-500">→</span>}
                 {displayReceiverUpiId && <span className="ml-1 truncate">{displayReceiverUpiId}</span>}
               </div>
             )}
 
-            <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
-              <p className="dark:text-gray-400">{timeAgo}</p>
+            <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground dark:text-gray-400">
+              <p>{timeAgo}</p>
               
-              {note && <p className="italic bg-muted px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none dark:bg-gray-800 dark:text-gray-300">{note}</p>}
+              {note && <p className="italic bg-muted dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none dark:text-gray-300">{note}</p>}
             </div>
           </div>
         </div>
       </CardContent>
     </Card>
   );
-};
+}

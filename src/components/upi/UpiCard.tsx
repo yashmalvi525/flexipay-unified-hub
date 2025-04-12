@@ -23,22 +23,22 @@ export const UpiCard: React.FC<UpiCardProps> = ({
 }) => {
   return (
     <Card 
-      className="card-hover cursor-pointer overflow-hidden" 
+      className={`card-hover cursor-pointer overflow-hidden dark:bg-gray-800 ${isDefault ? 'upi-card-default' : ''}`}
       onClick={onClick}
     >
       <CardContent className="p-4 flex items-center space-x-4">
-        <div className="h-10 w-10 rounded-full bg-flexipay-light-purple flex items-center justify-center">
-          <CreditCard className="h-5 w-5 text-flexipay-purple" />
+        <div className="h-10 w-10 rounded-full bg-flexipay-light-purple dark:bg-flexipay-purple/30 flex items-center justify-center shrink-0">
+          <CreditCard className="h-5 w-5 text-flexipay-purple dark:text-flexipay-light-purple" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold">{id}</h3>
-            {isDefault && <Badge className="bg-flexipay-purple">Default</Badge>}
+            <h3 className="font-semibold truncate dark:text-white">{id}</h3>
+            {isDefault && <Badge className="bg-flexipay-purple dark:bg-flexipay-purple/80 text-white">Default</Badge>}
           </div>
-          <p className="text-sm text-muted-foreground">{name}</p>
-          <p className="text-xs text-muted-foreground">{bank}</p>
+          <p className="text-sm text-foreground dark:text-gray-200">{name}</p>
+          <p className="text-xs text-muted-foreground dark:text-gray-400">{bank}</p>
           {lastUsed && (
-            <p className="text-xs text-muted-foreground mt-1">Last used: {lastUsed}</p>
+            <p className="text-xs text-muted-foreground dark:text-gray-400 mt-1">Last used: {lastUsed}</p>
           )}
         </div>
       </CardContent>
