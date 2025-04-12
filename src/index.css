@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -136,7 +137,7 @@
   }
   
   .card-glass {
-    @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-lg;
+    @apply backdrop-blur-sm bg-white/80 dark:bg-black/20 border border-white/20 shadow-lg;
   }
   
   .card-animated {
@@ -169,7 +170,7 @@
   }
   
   .provider-logo {
-    @apply flex items-center justify-center h-4 w-4 rounded-full shrink-0;
+    @apply flex items-center justify-center h-6 w-6 rounded-full shrink-0 overflow-hidden;
   }
   
   .dark .card-hover {

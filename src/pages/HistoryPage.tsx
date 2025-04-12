@@ -21,9 +21,9 @@ const HistoryPage = () => {
             </span>
           </h1>
           
-          <div className="flex items-center space-x-1 bg-muted rounded-full px-2 py-1 dark:bg-muted/30">
-            <Tag className="h-3 w-3 sm:h-4 sm:w-4 text-flexipay-purple" />
-            <span className="text-xs font-medium">Detailed Logs</span>
+          <div className="flex items-center space-x-1 bg-muted dark:bg-muted/30 rounded-full px-2 py-1">
+            <Tag className="h-3 w-3 sm:h-4 sm:w-4 text-flexipay-purple dark:text-flexipay-light-purple" />
+            <span className="text-xs font-medium dark:text-white">Detailed Logs</span>
           </div>
         </div>
         

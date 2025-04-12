@@ -110,17 +110,33 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
     }
   };
   
-  // Get provider icon
-  const ProviderIcon = () => {
+  // Get provider icon and logo
+  const ProviderLogo = () => {
     switch(txProvider) {
       case 'gpay':
-        return <div className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">GPay</div>;
+        return (
+          <div className="w-full h-full flex items-center justify-center bg-white dark:bg-blue-900/60 rounded-full">
+            <span className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">GPay</span>
+          </div>
+        );
       case 'phonepe':
-        return <div className="text-purple-600 dark:text-purple-400 text-[10px] font-bold">PhonePe</div>;
+        return (
+          <div className="w-full h-full flex items-center justify-center bg-white dark:bg-purple-900/60 rounded-full">
+            <span className="text-purple-600 dark:text-purple-400 text-[10px] font-bold">PhonePe</span>
+          </div>
+        );
       case 'paytm':
-        return <div className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">Paytm</div>;
+        return (
+          <div className="w-full h-full flex items-center justify-center bg-white dark:bg-blue-900/60 rounded-full">
+            <span className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">Paytm</span>
+          </div>
+        );
       case 'bhim':
-        return <div className="text-orange-600 dark:text-orange-400 text-[10px] font-bold">BHIM</div>;
+        return (
+          <div className="w-full h-full flex items-center justify-center bg-white dark:bg-orange-900/60 rounded-full">
+            <span className="text-orange-600 dark:text-orange-400 text-[10px] font-bold">BHIM</span>
+          </div>
+        );
       default:
         return <Smartphone className="h-3 w-3 text-muted-foreground" />;
     }
@@ -129,7 +145,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
   return (
     <Card className="card-hover bg-gradient-to-r from-white to-gray-50 border-gray-200/80 dark:from-gray-800 dark:to-gray-900 dark:border-gray-700 mb-3">
       <CardContent className="p-3 sm:p-4">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-start sm:items-center space-x-3">
           <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center ${getIconBg()}`}>
             <Icon className={`h-5 w-5 ${
               isIncoming 
@@ -148,23 +164,31 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
               </p>
             </div>
             
-            <div className="mt-1 text-xs sm:text-sm flex items-center">
-              <div className="mr-1.5 h-4 w-4 rounded-full bg-muted flex items-center justify-center dark:bg-muted/50">
-                <ProviderIcon />
+            <div className="mt-1 text-xs sm:text-sm flex flex-wrap items-center">
+              <div className="provider-logo mr-1.5">
+                <ProviderLogo />
               </div>
               
               <div className="flex-1 flex items-center text-muted-foreground overflow-hidden">
                 <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displaySenderName}</span>
-                {displaySenderUpiId && (
+                {displaySenderUpiId && !isMobile && (
                   <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displaySenderUpiId})</span>
                 )}
                 <ArrowRight className="h-3.5 w-3.5 mx-1.5 shrink-0 dark:text-gray-400" />
                 <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displayReceiverName}</span>
-                {displayReceiverUpiId && (
+                {displayReceiverUpiId && !isMobile && (
                   <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displayReceiverUpiId})</span>
                 )}
               </div>
             </div>
+            
+            {isMobile && (displaySenderUpiId || displayReceiverUpiId) && (
+              <div className="mt-0.5 text-[10px] text-muted-foreground overflow-hidden">
+                {displaySenderUpiId && <span className="mr-1 truncate">{displaySenderUpiId}</span>}
+                {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1">→</span>}
+                {displayReceiverUpiId && <span className="ml-1 truncate">{displayReceiverUpiId}</span>}
+              </div>
+            )}
 
             <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
               <p className="dark:text-gray-400">{timeAgo}</p>
