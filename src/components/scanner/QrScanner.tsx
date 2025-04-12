@@ -29,6 +29,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   const handleError = (err: Error) => {
     console.error('QR Scanner error:', err);
     setScannerError('Could not access camera. Please check permissions.');
+    setCameraActive(false);
     toast({
       title: "Camera Error",
       description: "Could not access camera. Please check permissions.",
@@ -38,6 +39,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   
   const handleScan = (data: ScanResult | null) => {
     if (data && data.text) {
+      console.log('QR code detected:', data.text);
       // In a real app, you would parse the UPI QR code data here
       // For now, we'll simulate that we've found merchant details
       
@@ -70,6 +72,11 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
           // Move to confirmation stage
           setScanStage('confirm');
           setCameraActive(false);
+          
+          toast({
+            title: "QR Code Detected",
+            description: `Found payment for ${merchantName}`,
+          });
         } else {
           toast({
             title: "Invalid QR Code",
@@ -108,6 +115,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   };
   
   const startScanner = () => {
+    setScannerError(null);
     setCameraActive(true);
   };
   
@@ -117,6 +125,34 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
       setScanStage('scan');
     }
   };
+  
+  // Request camera permissions explicitly on component mount
+  useEffect(() => {
+    if (cameraActive) {
+      // Request camera permission explicitly
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then((stream) => {
+          // Permission granted, but we don't need to do anything with the stream
+          // as QrReader will handle camera access
+          console.log('Camera permission granted');
+          
+          // Clean up stream when component unmounts
+          return () => {
+            stream.getTracks().forEach(track => track.stop());
+          };
+        })
+        .catch((err) => {
+          console.error('Camera permission denied:', err);
+          setScannerError('Camera permission denied. Please enable camera access.');
+          setCameraActive(false);
+          toast({
+            title: "Camera Access Denied",
+            description: "Please enable camera access in your browser settings",
+            variant: "destructive"
+          });
+        });
+    }
+  }, [cameraActive, toast]);
   
   // Clean up camera when component unmounts
   useEffect(() => {
@@ -142,10 +178,18 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                       onError={handleError}
                       onScan={handleScan}
                       constraints={{
-                        video: { facingMode: 'environment' }
+                        video: { 
+                          facingMode: 'environment',
+                          width: { ideal: 1280 },
+                          height: { ideal: 720 }
+                        }
                       }}
                       className="w-full h-full"
-                      style={{ width: '100%' }}
+                      style={{ 
+                        width: '100%', 
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
                     />
                   ) : (
                     <div className="text-center p-4">
