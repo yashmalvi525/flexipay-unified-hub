@@ -149,7 +149,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
             </div>
             
             <div className="mt-1 text-xs sm:text-sm flex items-center">
-              <div className="mr-1 h-4 w-4 rounded-full bg-muted flex items-center justify-center dark:bg-muted/50">
+              <div className="mr-1.5 h-4 w-4 rounded-full bg-muted flex items-center justify-center dark:bg-muted/50">
                 <ProviderIcon />
               </div>
               
@@ -158,7 +158,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
                 {displaySenderUpiId && (
                   <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displaySenderUpiId})</span>
                 )}
-                <ArrowRight className="h-3.5 w-3.5 mx-1 shrink-0 dark:text-gray-400" />
+                <ArrowRight className="h-3.5 w-3.5 mx-1.5 shrink-0 dark:text-gray-400" />
                 <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displayReceiverName}</span>
                 {displayReceiverUpiId && (
                   <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displayReceiverUpiId})</span>
