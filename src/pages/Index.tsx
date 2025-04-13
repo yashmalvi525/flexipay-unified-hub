@@ -95,12 +95,12 @@ const Dashboard = () => {
             <Button className="w-full bg-gradient-to-r from-flexipay-purple to-flexipay-blue text-white hover:opacity-90" asChild>
               <Link to="/scan">
                 <QrCode className="h-4 w-4 mr-2" />
-                <span>Scan QR</span>
+                <span className="text-slate-950">Scan QR</span>
               </Link>
             </Button>
             <div className="grid grid-cols-2 gap-2">
               <Button variant="outline" className="border-flexipay-purple/30 hover:bg-flexipay-purple/10" asChild>
-                <Link to="/upi">
+                <Link to="/upi" className="bg-slate-900">
                   <ArrowUpRight className="h-4 w-4 mr-2 text-flexipay-purple" />
                   <span>Pay</span>
                 </Link>
