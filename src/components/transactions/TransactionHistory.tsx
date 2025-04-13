@@ -73,9 +73,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium">Recent Transactions</h2>
+          <h2 className="text-lg font-medium dark:text-white">Recent Transactions</h2>
           <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-[130px] bg-white">
+            <SelectTrigger className="w-[130px] bg-white dark:bg-gray-800 dark:text-white">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
@@ -99,21 +99,21 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">Transaction History</h2>
+        <h2 className="text-xl font-semibold dark:text-white">Transaction History</h2>
         
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-none">
-            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground dark:text-gray-400" />
             <Input 
               placeholder="Search transactions..." 
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="pl-9 w-full sm:w-[220px]"
+              className="pl-9 w-full sm:w-[220px] bg-white dark:bg-gray-800 dark:text-white"
             />
           </div>
           
           <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-[140px] bg-white">
+            <SelectTrigger className="w-[140px] bg-white dark:bg-gray-800 dark:text-white">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
@@ -124,7 +124,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           </Select>
           
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-2 bg-white text-sm font-medium rounded-md border border-input shadow-sm hover:bg-accent">
+            <DropdownMenuTrigger className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-gray-800 text-sm font-medium rounded-md border border-input shadow-sm hover:bg-accent dark:text-white">
               <SlidersHorizontal className="h-4 w-4" />
               <span>Advanced</span>
             </DropdownMenuTrigger>
@@ -152,29 +152,29 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
       {(typeFilter !== 'all' || upiFilter || searchQuery) && (
         <div className="flex flex-wrap gap-2">
           {typeFilter !== 'all' && (
-            <Badge variant="outline" className="bg-muted">
+            <Badge variant="outline" className="bg-muted dark:bg-gray-700 dark:text-white">
               {typeFilter === 'incoming' ? 'Received' : 'Sent'}
-              <button className="ml-1 text-muted-foreground hover:text-foreground" onClick={() => setTypeFilter('all')}>×</button>
+              <button className="ml-1 text-muted-foreground hover:text-foreground dark:text-gray-300 dark:hover:text-white" onClick={() => setTypeFilter('all')}>×</button>
             </Badge>
           )}
           
           {upiFilter && (
-            <Badge variant="outline" className="bg-muted">
+            <Badge variant="outline" className="bg-muted dark:bg-gray-700 dark:text-white">
               UPI: {upiFilter}
-              <button className="ml-1 text-muted-foreground hover:text-foreground" onClick={() => setUpiFilter(null)}>×</button>
+              <button className="ml-1 text-muted-foreground hover:text-foreground dark:text-gray-300 dark:hover:text-white" onClick={() => setUpiFilter(null)}>×</button>
             </Badge>
           )}
           
           {searchQuery && (
-            <Badge variant="outline" className="bg-muted">
+            <Badge variant="outline" className="bg-muted dark:bg-gray-700 dark:text-white">
               Search: {searchQuery}
-              <button className="ml-1 text-muted-foreground hover:text-foreground" onClick={() => setSearchQuery('')}>×</button>
+              <button className="ml-1 text-muted-foreground hover:text-foreground dark:text-gray-300 dark:hover:text-white" onClick={() => setSearchQuery('')}>×</button>
             </Badge>
           )}
           
           <button 
             onClick={clearFilters} 
-            className="text-xs text-muted-foreground hover:text-foreground underline"
+            className="text-xs text-muted-foreground hover:text-foreground dark:text-gray-400 dark:hover:text-white underline"
           >
             Clear all
           </button>
@@ -182,11 +182,11 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
       )}
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="bg-gradient-to-r from-flexipay-purple/10 to-flexipay-blue/10 p-1 w-full">
-          <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">All</TabsTrigger>
-          <TabsTrigger value="today" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Today</TabsTrigger>
-          <TabsTrigger value="week" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Week</TabsTrigger>
-          <TabsTrigger value="month" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Month</TabsTrigger>
+        <TabsList className="bg-gradient-to-r from-gray-200 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-1 w-full">
+          <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 text-gray-800 dark:text-white">All</TabsTrigger>
+          <TabsTrigger value="today" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 text-gray-800 dark:text-white">Today</TabsTrigger>
+          <TabsTrigger value="week" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 text-gray-800 dark:text-white">Week</TabsTrigger>
+          <TabsTrigger value="month" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 text-gray-800 dark:text-white">Month</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4 pt-4">
           {filteredTransactions.length > 0 ? (
@@ -194,14 +194,14 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
               <TransactionCard key={transaction.id} transaction={transaction} showFullDetails={showFullDetails} />
             ))
           ) : (
-            <div className="text-center py-12 bg-muted/30 rounded-lg">
-              <Filter className="mx-auto h-10 w-10 text-muted-foreground opacity-50 mb-2" />
-              <p className="text-muted-foreground font-medium">No transactions found</p>
-              <p className="text-sm text-muted-foreground mt-1">Try adjusting your filters</p>
+            <div className="text-center py-12 bg-muted/30 dark:bg-gray-800/50 rounded-lg">
+              <Filter className="mx-auto h-10 w-10 text-muted-foreground dark:text-gray-500 opacity-50 mb-2" />
+              <p className="text-muted-foreground dark:text-gray-300 font-medium">No transactions found</p>
+              <p className="text-sm text-muted-foreground dark:text-gray-400 mt-1">Try adjusting your filters</p>
               {(typeFilter !== 'all' || upiFilter || searchQuery) && (
                 <button 
                   onClick={clearFilters}
-                  className="mt-3 text-sm text-flexipay-purple hover:underline"
+                  className="mt-3 text-sm text-flexipay-purple dark:text-flexipay-light-purple hover:underline"
                 >
                   Clear all filters
                 </button>
@@ -210,17 +210,17 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           )}
         </TabsContent>
         <TabsContent value="today" className="pt-4">
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-muted-foreground dark:text-gray-400">
             <p>Today's transactions will appear here</p>
           </div>
         </TabsContent>
         <TabsContent value="week" className="pt-4">
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-muted-foreground dark:text-gray-400">
             <p>This week's transactions will appear here</p>
           </div>
         </TabsContent>
         <TabsContent value="month" className="pt-4">
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-muted-foreground dark:text-gray-400">
             <p>This month's transactions will appear here</p>
           </div>
         </TabsContent>
@@ -228,4 +228,3 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
     </div>
   );
 };
-

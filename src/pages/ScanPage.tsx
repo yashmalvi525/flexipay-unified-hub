@@ -25,7 +25,7 @@ const ScanPage = () => {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <Card className="bg-gradient-to-br from-flexipay-blue/10 to-flexipay-blue/20 border-flexipay-blue/30 card-hover dark:from-flexipay-blue/10 dark:to-flexipay-blue/20 dark:border-flexipay-blue/30">
             <CardContent className="p-3 flex flex-col items-center justify-center">
-              <Button className="w-full bg-flexipay-blue text-white hover:bg-flexipay-blue/80">
+              <Button className="w-full bg-flexipay-blue text-white hover:bg-flexipay-blue/80 font-semibold shadow-sm">
                 <ArrowUp className="h-4 w-4 mr-2" />
                 <span>Pay</span>
               </Button>
@@ -34,7 +34,7 @@ const ScanPage = () => {
           
           <Card className="bg-gradient-to-br from-flexipay-purple/10 to-flexipay-purple/20 border-flexipay-purple/30 card-hover dark:from-flexipay-purple/10 dark:to-flexipay-purple/20 dark:border-flexipay-purple/30">
             <CardContent className="p-3 flex flex-col items-center justify-center">
-              <Button className="w-full bg-flexipay-purple text-white hover:bg-flexipay-purple/80">
+              <Button className="w-full bg-flexipay-purple text-white hover:bg-flexipay-purple/80 font-semibold shadow-sm">
                 <ArrowDown className="h-4 w-4 mr-2" />
                 <span>Request</span>
               </Button>
@@ -50,9 +50,9 @@ const ScanPage = () => {
             <QrScanner upiIds={mockUpiIds} />
           </CardContent>
           
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center p-2 bg-white/90 dark:bg-black/70 backdrop-blur-sm rounded-full shadow-lg border border-flexipay-purple/20 dark:border-flexipay-purple/40">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg border border-flexipay-purple/20 dark:border-flexipay-purple/40">
             <QrCode className="h-5 w-5 text-flexipay-purple dark:text-flexipay-light-purple mr-2" />
-            <span className="text-xs font-medium dark:text-white">Position QR in frame</span>
+            <span className="text-xs font-medium text-gray-800 dark:text-gray-100">Position QR in frame</span>
           </div>
         </Card>
         

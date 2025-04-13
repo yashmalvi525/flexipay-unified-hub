@@ -22,13 +22,13 @@ const HistoryPage = () => {
             </span>
           </h1>
           
-          <div className="flex items-center space-x-1 bg-muted dark:bg-gray-800/70 rounded-full px-2 py-1">
-            <Tag className="h-3 w-3 sm:h-4 sm:w-4 text-flexipay-purple dark:text-flexipay-light-purple" />
-            <span className="text-xs font-medium dark:text-white">Detailed Logs</span>
+          <div className="flex items-center space-x-1 bg-gray-800 dark:bg-gray-700 text-white rounded-full px-3 py-1.5 shadow-sm">
+            <Tag className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+            <span className="text-xs font-medium">Detailed Logs</span>
           </div>
         </div>
         
-        <Card className="card-hover bg-gradient-to-r from-white to-flexipay-light-purple/10 border-flexipay-purple/20 overflow-hidden relative dark:from-gray-900 dark:to-flexipay-purple/10 dark:border-flexipay-purple/30 mx-2 sm:mx-0">
+        <Card className="card-hover bg-gradient-to-r from-white to-flexipay-light-purple/10 border-flexipay-purple/20 overflow-hidden relative dark:from-gray-900 dark:to-flexipay-purple/10 dark:border-flexipay-purple/30 mx-2 sm:mx-0 shadow-md">
           <div className="absolute -right-16 -top-16 w-48 h-48 bg-flexipay-blue/5 rounded-full blur-xl dark:bg-flexipay-blue/10"></div>
           <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-purple/5 rounded-full blur-xl dark:bg-flexipay-purple/10"></div>
           

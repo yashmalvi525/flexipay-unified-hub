@@ -60,7 +60,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
   const isIncoming = type === 'incoming';
   const Icon = isIncoming ? ArrowDownLeft : ArrowUpRight;
   const amountColor = isIncoming ? 'text-green-600' : 'text-red-600';
-  const amountColorDark = isIncoming ? 'dark:text-green-500' : 'dark:text-red-500';
+  const amountColorDark = isIncoming ? 'dark:text-green-400' : 'dark:text-red-400';
   const timeAgo = formatDistanceToNow(timestamp, { addSuffix: true });
   
   // Use either new fields or fallback to old fields for backward compatibility
@@ -96,17 +96,17 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
   const getIconBg = () => {
     switch(txProvider) {
       case 'gpay':
-        return 'bg-blue-100 dark:bg-blue-900/30';
+        return 'bg-blue-100 dark:bg-blue-900/40';
       case 'phonepe':
-        return 'bg-purple-100 dark:bg-purple-900/30';
+        return 'bg-purple-100 dark:bg-purple-900/40';
       case 'paytm':
-        return 'bg-blue-100 dark:bg-blue-900/30';
+        return 'bg-blue-100 dark:bg-blue-900/40';
       case 'bhim':
-        return 'bg-orange-100 dark:bg-orange-900/30';
+        return 'bg-orange-100 dark:bg-orange-900/40';
       default:
         return isIncoming 
-          ? 'bg-green-100 dark:bg-green-900/30' 
-          : 'bg-red-100 dark:bg-red-900/30';
+          ? 'bg-green-100 dark:bg-green-900/40' 
+          : 'bg-red-100 dark:bg-red-900/40';
     }
   };
   
@@ -116,25 +116,25 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
       case 'gpay':
         return (
           <div className="w-full h-full flex items-center justify-center bg-white dark:bg-blue-900/60 rounded-full">
-            <span className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">GPay</span>
+            <span className="text-blue-600 dark:text-blue-300 text-[10px] font-bold">GPay</span>
           </div>
         );
       case 'phonepe':
         return (
           <div className="w-full h-full flex items-center justify-center bg-white dark:bg-purple-900/60 rounded-full">
-            <span className="text-purple-600 dark:text-purple-400 text-[10px] font-bold">PhonePe</span>
+            <span className="text-purple-600 dark:text-purple-300 text-[10px] font-bold">PhonePe</span>
           </div>
         );
       case 'paytm':
         return (
           <div className="w-full h-full flex items-center justify-center bg-white dark:bg-blue-900/60 rounded-full">
-            <span className="text-blue-600 dark:text-blue-400 text-[10px] font-bold">Paytm</span>
+            <span className="text-blue-600 dark:text-blue-300 text-[10px] font-bold">Paytm</span>
           </div>
         );
       case 'bhim':
         return (
           <div className="w-full h-full flex items-center justify-center bg-white dark:bg-orange-900/60 rounded-full">
-            <span className="text-orange-600 dark:text-orange-400 text-[10px] font-bold">BHIM</span>
+            <span className="text-orange-600 dark:text-orange-300 text-[10px] font-bold">BHIM</span>
           </div>
         );
       default:
@@ -142,7 +142,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
     }
   };
 
-  const cardClass = `card-hover ${isIncoming ? 'transaction-received' : 'transaction-sent'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mb-3`;
+  const cardClass = `card-hover ${isIncoming ? 'transaction-received' : 'transaction-sent'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 mb-3 shadow-sm`;
 
   return (
     <Card className={cardClass}>
@@ -151,8 +151,8 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
           <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center ${getIconBg()}`}>
             <Icon className={`h-5 w-5 ${
               isIncoming 
-                ? 'text-green-600 dark:text-green-500' 
-                : 'text-red-600 dark:text-red-500'
+                ? 'text-green-600 dark:text-green-400' 
+                : 'text-red-600 dark:text-red-400'
             }`} />
           </div>
           
@@ -184,13 +184,12 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
               </div>
             </div>
             
-            {isMobile && (displaySenderUpiId || displayReceiverUpiId) && (
-              <div className="mt-0.5 text-[10px] text-muted-foreground dark:text-gray-400 overflow-hidden">
-                {displaySenderUpiId && <span className="mr-1 truncate">{displaySenderUpiId}</span>}
-                {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1 dark:text-gray-500">→</span>}
-                {displayReceiverUpiId && <span className="ml-1 truncate">{displayReceiverUpiId}</span>}
-              </div>
-            )}
+            {/* Always show UPI IDs on mobile in a more compact way */}
+            <div className="mt-0.5 text-[10px] text-muted-foreground dark:text-gray-400 overflow-hidden">
+              {displaySenderUpiId && <span className="mr-1 truncate">{displaySenderUpiId}</span>}
+              {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1 dark:text-gray-500">→</span>}
+              {displayReceiverUpiId && <span className="ml-1 truncate">{displayReceiverUpiId}</span>}
+            </div>
 
             <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground dark:text-gray-400">
               <p>{timeAgo}</p>

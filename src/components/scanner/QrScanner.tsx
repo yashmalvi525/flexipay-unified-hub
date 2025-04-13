@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { UpiSelector, UpiId } from '../upi/UpiSelector';
 import { useToast } from '@/hooks/use-toast';
 import QrReader from 'react-qr-scanner';
-import { Camera, RefreshCw, Ban, CheckCircle } from 'lucide-react';
+import { Camera, RefreshCw, Ban, CheckCircle, Smartphone } from 'lucide-react';
 
 interface QrScannerProps {
   upiIds: UpiId[];
@@ -26,6 +26,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   const [cameraPermissionStatus, setCameraPermissionStatus] = useState<'prompt' | 'granted' | 'denied'>('prompt');
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [merchantInfo, setMerchantInfo] = useState({ name: 'Merchant', id: 'merchant@upi' });
+  const [facingMode, setFacingMode] = useState('environment');  // Default to back camera
   const { toast } = useToast();
 
   // Detect if user is on a mobile device
@@ -79,6 +80,8 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
       errorMessage = 'Camera is in use by another application. Please close other apps using the camera.';
     } else if (err.name === 'AbortError') {
       errorMessage = 'Camera initialization was aborted. Please try again.';
+    } else if (err.message && err.message.includes('getUserMedia')) {
+      errorMessage = 'Camera access not available. Your browser might not support this feature or requires HTTPS.';
     }
     
     setScannerError(errorMessage);
@@ -170,7 +173,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   };
   
   const startScanner = () => {
-    console.log('Starting scanner...');
+    console.log('Starting scanner with facing mode:', facingMode);
     setScannerError(null);
     setCameraActive(true);
     
@@ -178,13 +181,13 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ 
         video: { 
-          facingMode: isMobileDevice ? 'environment' : 'user',
+          facingMode, 
           width: { ideal: 1280 },
           height: { ideal: 720 }
         } 
       })
       .then(stream => {
-        console.log('Camera permission granted, stream obtained');
+        console.log('Camera stream obtained successfully');
         // We don't need to do anything with the stream here as QrReader will handle it
         // Just clean up the stream when not needed
         return () => {
@@ -202,11 +205,32 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     }
   };
   
+  const toggleCamera = () => {
+    const newMode = facingMode === 'environment' ? 'user' : 'environment';
+    console.log('Switching camera to:', newMode);
+    setFacingMode(newMode);
+    
+    if (cameraActive) {
+      // Restart the camera with the new facing mode
+      setCameraActive(false);
+      setTimeout(() => {
+        setCameraActive(true);
+      }, 300);
+    }
+  };
+  
   const cancelScan = () => {
     setCameraActive(false);
     if (scanStage === 'confirm') {
       setScanStage('scan');
     }
+  };
+  
+  // Simulate a scan for testing - this would be removed in production
+  const simulateScan = () => {
+    handleScan({ 
+      text: 'upi://pay?pa=test@merchant.upi&pn=Test%20Merchant&am=599.00' 
+    });
   };
   
   // Clean up camera when component unmounts
@@ -220,11 +244,11 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   }, [cameraActive]);
   
   return (
-    <Card className="max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>{scanStage === 'scan' ? 'Scan QR Code' : 'Confirm Payment'}</CardTitle>
+    <Card className="max-w-md mx-auto bg-white dark:bg-gray-800 shadow-md">
+      <CardHeader className="p-4">
+        <CardTitle className="text-xl text-center dark:text-white">{scanStage === 'scan' ? 'Scan QR Code' : 'Confirm Payment'}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 pt-0">
         {scanStage === 'scan' ? (
           <div className="space-y-4">
             <div className="aspect-square bg-black rounded-lg flex items-center justify-center border-2 border-dashed border-muted relative overflow-hidden">
@@ -237,7 +261,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                       onScan={handleScan}
                       constraints={{
                         video: { 
-                          facingMode: isMobileDevice ? 'environment' : 'user',
+                          facingMode,
                           width: { ideal: 1280 },
                           height: { ideal: 720 },
                           aspectRatio: 1
@@ -254,20 +278,35 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                     <div className="text-center p-4">
                       <Ban className="h-12 w-12 text-destructive mx-auto mb-2" />
                       <p className="text-destructive font-medium mb-2">{scannerError}</p>
-                      <Button variant="outline" onClick={retryCamera} className="mt-2">
+                      <Button variant="outline" onClick={retryCamera} className="mt-2 bg-white dark:bg-gray-700 dark:text-white">
                         <RefreshCw className="h-4 w-4 mr-2" />
                         Retry Camera
                       </Button>
                     </div>
                   )}
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm z-10"
-                    onClick={cancelScan}
-                  >
-                    Cancel
-                  </Button>
+                  <div className="absolute top-2 right-2 flex space-x-2 z-10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="bg-background/80 backdrop-blur-sm dark:bg-gray-800/80 dark:text-white"
+                      onClick={toggleCamera}
+                    >
+                      <Smartphone className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="bg-background/80 backdrop-blur-sm dark:bg-gray-800/80 dark:text-white"
+                      onClick={cancelScan}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                  
+                  {/* Targeting frame */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-4/5 h-4/5 border-2 border-white/70 rounded-lg"></div>
+                  </div>
                 </>
               ) : (
                 <div className="text-center p-6">
@@ -276,21 +315,32 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                   {cameraPermissionStatus === 'denied' ? (
                     <>
                       <p className="text-destructive font-medium mb-2">Camera access denied</p>
-                      <p className="text-muted-foreground text-sm mb-4">Please enable camera access in your browser settings</p>
+                      <p className="text-white text-sm mb-4">Please enable camera access in your browser settings</p>
                     </>
                   ) : (
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-white mb-4">
                       Camera permission required to scan QR codes
                     </p>
                   )}
                   
-                  <Button 
-                    onClick={startScanner} 
-                    className="btn-primary"
-                    disabled={cameraPermissionStatus === 'denied'}
-                  >
-                    Start Camera
-                  </Button>
+                  <div className="flex flex-col space-y-2">
+                    <Button 
+                      onClick={startScanner} 
+                      className="bg-flexipay-purple hover:bg-flexipay-purple/90 text-white"
+                      disabled={cameraPermissionStatus === 'denied'}
+                    >
+                      Start Camera
+                    </Button>
+                    
+                    {/* For testing only */}
+                    <Button 
+                      onClick={simulateScan} 
+                      variant="outline"
+                      className="bg-white/10 text-white hover:bg-white/20"
+                    >
+                      Simulate Scan
+                    </Button>
+                  </div>
                   
                   {cameraPermissionStatus === 'denied' && (
                     <p className="text-xs text-muted-foreground mt-2">
@@ -306,23 +356,23 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
             <div className="p-4 bg-flexipay-light-purple dark:bg-flexipay-purple/20 rounded-lg text-center">
               <CheckCircle className="h-8 w-8 mx-auto mb-2 text-flexipay-purple dark:text-flexipay-light-purple" />
               <h3 className="font-medium text-flexipay-purple dark:text-flexipay-light-purple">{merchantInfo.name}</h3>
-              <p className="text-sm text-muted-foreground">{merchantInfo.id}</p>
+              <p className="text-sm text-muted-foreground dark:text-gray-400">{merchantInfo.id}</p>
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">Amount (₹)</label>
+              <label className="block text-sm font-medium mb-1 dark:text-white">Amount (₹)</label>
               <Input 
                 type="number" 
                 value={amount} 
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Enter amount"
                 required
-                className="dark:bg-muted/30"
+                className="dark:bg-gray-700 dark:text-white"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">Pay from</label>
+              <label className="block text-sm font-medium mb-1 dark:text-white">Pay from</label>
               <UpiSelector 
                 upiIds={upiIds}
                 selectedId={selectedUpiId}
@@ -331,23 +381,23 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">Note (Optional)</label>
+              <label className="block text-sm font-medium mb-1 dark:text-white">Note (Optional)</label>
               <Input 
                 value={note} 
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Add a note"
-                className="dark:bg-muted/30"
+                className="dark:bg-gray-700 dark:text-white"
               />
             </div>
           </div>
         )}
       </CardContent>
       {scanStage === 'confirm' && (
-        <CardFooter className="flex gap-2">
-          <Button variant="outline" onClick={() => setScanStage('scan')} className="flex-1">
+        <CardFooter className="flex gap-2 p-4 pt-0">
+          <Button variant="outline" onClick={() => setScanStage('scan')} className="flex-1 dark:bg-gray-700 dark:text-white">
             Cancel
           </Button>
-          <Button className="btn-primary flex-1" onClick={handlePayment}>
+          <Button className="bg-flexipay-purple hover:bg-flexipay-purple/90 text-white flex-1" onClick={handlePayment}>
             Pay ₹{amount || '0'}
           </Button>
         </CardFooter>

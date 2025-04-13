@@ -33,7 +33,7 @@ export const UpiCard: React.FC<UpiCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold truncate dark:text-white">{id}</h3>
-            {isDefault && <Badge className="bg-flexipay-purple dark:bg-flexipay-purple/80 text-white">Default</Badge>}
+            {isDefault && <Badge className="bg-flexipay-purple dark:bg-flexipay-purple text-white">Default</Badge>}
           </div>
           <p className="text-sm text-foreground dark:text-gray-200">{name}</p>
           <p className="text-xs text-muted-foreground dark:text-gray-400">{bank}</p>
