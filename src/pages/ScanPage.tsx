@@ -5,7 +5,7 @@ import { QrScanner } from '@/components/scanner/QrScanner';
 import { mockUpiIds } from '@/utils/mock-data';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { QrCode, ArrowUp, ArrowDown, Scan } from 'lucide-react';
+import { QrCode, ArrowUp, ArrowDown, Scan, Camera } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 
@@ -75,7 +75,7 @@ const ScanPage = () => {
           <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 rounded-full blur-xl dark:from-flexipay-purple/30 dark:to-flexipay-blue/30"></div>
           <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-gradient-to-tr from-flexipay-blue/20 to-flexipay-purple/20 rounded-full blur-xl dark:from-flexipay-blue/30 dark:to-flexipay-purple/30"></div>
           
-          <QrScanner upiIds={mockUpiIds} />
+          <QrScanner upiIds={mockUpiIds} startImmediately={true} />
         </div>
         
         <div className="text-center text-xs text-muted-foreground dark:text-gray-400 px-4 py-2 bg-muted dark:bg-gray-800/70 rounded-full inline-block mx-auto">
