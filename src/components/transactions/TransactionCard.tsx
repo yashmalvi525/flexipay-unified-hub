@@ -5,10 +5,13 @@ import {
   ArrowDownLeft, 
   ArrowUpRight, 
   ArrowRight,
-  Smartphone
+  Smartphone,
+  Banknote,
+  Clock
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export interface Transaction {
   id: string;
@@ -147,7 +150,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
   return (
     <Card className={cardClass}>
       <CardContent className="p-3 sm:p-4">
-        <div className="flex items-start sm:items-center space-x-3">
+        <div className="flex items-start space-x-3">
           <div className={`h-10 w-10 shrink-0 rounded-full flex items-center justify-center ${getIconBg()}`}>
             <Icon className={`h-5 w-5 ${
               isIncoming 
@@ -172,29 +175,69 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
               </div>
               
               <div className="flex-1 flex items-center text-muted-foreground overflow-hidden">
-                <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displaySenderName}</span>
-                {displaySenderUpiId && !isMobile && (
-                  <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displaySenderUpiId})</span>
-                )}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">
+                        {displaySenderName}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{displaySenderName}</p>
+                      {displaySenderUpiId && <p className="text-xs">{displaySenderUpiId}</p>}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
                 <ArrowRight className="h-3.5 w-3.5 mx-1.5 shrink-0 dark:text-gray-400" />
-                <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displayReceiverName}</span>
-                {displayReceiverUpiId && !isMobile && (
-                  <span className="ml-1 truncate dark:text-gray-400 text-xs hidden sm:inline">({displayReceiverUpiId})</span>
-                )}
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">
+                        {displayReceiverName}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{displayReceiverName}</p>
+                      {displayReceiverUpiId && <p className="text-xs">{displayReceiverUpiId}</p>}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             
-            {/* Always show UPI IDs on mobile in a more compact way */}
-            <div className="mt-0.5 text-[10px] text-muted-foreground dark:text-gray-400 overflow-hidden">
-              {displaySenderUpiId && <span className="mr-1 truncate">{displaySenderUpiId}</span>}
-              {displaySenderUpiId && displayReceiverUpiId && <span className="mx-1 dark:text-gray-500">→</span>}
-              {displayReceiverUpiId && <span className="ml-1 truncate">{displayReceiverUpiId}</span>}
+            {/* UPI IDs display with better formatting */}
+            <div className="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
+              {displaySenderUpiId && (
+                <div className="bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5 truncate max-w-[45%]">
+                  <span className="text-gray-700 dark:text-gray-300">{displaySenderUpiId}</span>
+                </div>
+              )}
+              
+              {displaySenderUpiId && displayReceiverUpiId && (
+                <ArrowRight className="h-2.5 w-2.5 shrink-0 text-gray-400 dark:text-gray-500" />
+              )}
+              
+              {displayReceiverUpiId && (
+                <div className="bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5 truncate max-w-[45%]">
+                  <span className="text-gray-700 dark:text-gray-300">{displayReceiverUpiId}</span>
+                </div>
+              )}
             </div>
 
-            <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground dark:text-gray-400">
-              <p>{timeAgo}</p>
+            <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground dark:text-gray-400">
+              <div className="flex items-center">
+                <Clock className="h-3 w-3 mr-1" />
+                <p>{timeAgo}</p>
+              </div>
               
-              {note && <p className="italic bg-muted dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none dark:text-gray-300">{note}</p>}
+              {note && (
+                <div className="flex items-center bg-muted dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none">
+                  <Banknote className="h-3 w-3 mr-1 text-gray-500 dark:text-gray-400" />
+                  <p className="truncate dark:text-gray-300">{note}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
