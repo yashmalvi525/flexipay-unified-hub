@@ -125,7 +125,7 @@ const Dashboard = () => {
               <Button size="sm" variant="outline" className="border-flexipay-purple/30 hover:bg-flexipay-purple/10" asChild>
                 <Link to="/upi">
                   <Plus className="h-4 w-4 mr-1" />
-                  <span className="bg-slate-900">Add</span>
+                  <span>Add</span>
                 </Link>
               </Button>
             </CardTitle>
