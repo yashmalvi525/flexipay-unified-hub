@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,15 +6,10 @@ import { UpiCard } from '@/components/upi/UpiCard';
 import { TransactionHistory } from '@/components/transactions/TransactionHistory';
 import { BalanceOverview } from '@/components/analytics/BalanceOverview';
 import { mockUpiIds, mockTransactions, mockBalanceData, mockCurrentBalance } from '@/utils/mock-data';
-import { 
-  CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap,
-  Phone, Users, Building, Receipt, Smartphone, RefreshCw, AtSign
-} from 'lucide-react';
+import { CreditCard, QrCode, ArrowUpRight, ArrowDownLeft, Plus, TrendingUp, Gift, Zap, Phone, Users, Building, Receipt, Smartphone, RefreshCw, AtSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 const QuickPaymentOptions = () => {
-  return (
-    <div className="grid grid-cols-4 gap-2 mb-6">
+  return <div className="grid grid-cols-4 gap-2 mb-6">
       <Link to="/scan" className="flex flex-col items-center text-center">
         <div className="h-12 w-12 rounded-full bg-flexipay-blue/10 flex items-center justify-center mb-1">
           <QrCode className="h-5 w-5 text-flexipay-blue" />
@@ -71,13 +65,10 @@ const QuickPaymentOptions = () => {
         </div>
         <span className="text-xs">Mobile recharge</span>
       </Link>
-    </div>
-  );
+    </div>;
 };
-
 const Dashboard = () => {
-  return (
-    <div className="space-y-6 animate-fade-in">
+  return <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">Welcome to <span className="text-flexipay-purple">Flexi</span><span className="text-flexipay-blue">Pay</span></h1>
       </div>
@@ -124,8 +115,8 @@ const Dashboard = () => {
           </CardContent>
         </Card>
         
-        <Card className="col-span-1 md:col-span-2 card-hover bg-gradient-to-br from-white to-flexipay-light-purple/30 border-flexipay-purple/10">
-          <CardHeader className="pb-2">
+        <Card className="col-span-1 md:col-span-2 card-hover bg-gradient-to-br from-white to-flexipay-light-purple/30 border-flexipay-purple/10 bg-slate-950">
+          <CardHeader className="pb-2 bg-slate-950">
             <CardTitle className="text-lg flex items-center justify-between">
               <div className="flex items-center">
                 <CreditCard className="h-5 w-5 mr-2 text-flexipay-purple" />
@@ -139,18 +130,9 @@ const Dashboard = () => {
               </Button>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 bg-slate-950">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {mockUpiIds.slice(0, 2).map((upi) => (
-                <UpiCard 
-                  key={upi.id}
-                  id={upi.id}
-                  name={upi.name}
-                  bank={upi.bank}
-                  isDefault={upi.isDefault}
-                  lastUsed={upi.lastUsed}
-                />
-              ))}
+              {mockUpiIds.slice(0, 2).map(upi => <UpiCard key={upi.id} id={upi.id} name={upi.name} bank={upi.bank} isDefault={upi.isDefault} lastUsed={upi.lastUsed} />)}
             </div>
             <Button variant="ghost" size="sm" className="w-full text-flexipay-purple hover:text-flexipay-purple/80 hover:bg-flexipay-purple/10" asChild>
               <Link to="/upi">View all UPI IDs</Link>
@@ -210,16 +192,11 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 const Index = () => {
-  return (
-    <AppLayout>
+  return <AppLayout>
       <Dashboard />
-    </AppLayout>
-  );
+    </AppLayout>;
 };
-
 export default Index;
