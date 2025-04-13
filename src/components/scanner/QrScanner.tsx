@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,15 +12,14 @@ import Html5QrcodePlugin from './Html5QrcodePlugin';
 
 interface QrScannerProps {
   upiIds: UpiId[];
-  startImmediately?: boolean;
 }
 
-export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately = false }) => {
+export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [selectedUpiId, setSelectedUpiId] = useState(upiIds[0]?.id || '');
   const [scanStage, setScanStage] = useState<'scan' | 'confirm'>('scan');
-  const [cameraActive, setCameraActive] = useState(startImmediately);
+  const [cameraActive, setCameraActive] = useState(false);
   const [scannerError, setScannerError] = useState<string | null>(null);
   const [cameraPermissionStatus, setCameraPermissionStatus] = useState<'prompt' | 'granted' | 'denied'>('prompt');
   const [isMobileDevice, setIsMobileDevice] = useState(false);
@@ -81,8 +79,8 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
   }, []);
   
   useEffect(() => {
-    if (!hasInitialized.current && cameraPermissionStatus === 'granted') {
-      console.log('Auto-starting camera with granted permission');
+    if (!hasInitialized.current && cameraPermissionStatus === 'granted' && isMobileDevice) {
+      console.log('Auto-starting camera on mobile device with granted permission');
       setTimeout(() => {
         if (mountedRef.current) {
           setCameraActive(true);
@@ -91,21 +89,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
       }, 800);
       hasInitialized.current = true;
     }
-  }, [cameraPermissionStatus]);
-  
-  // Start camera automatically based on startImmediately prop
-  useEffect(() => {
-    if (startImmediately && !hasInitialized.current) {
-      console.log('Starting camera immediately based on prop');
-      setTimeout(() => {
-        if (mountedRef.current) {
-          setCameraActive(true);
-          hasInitialized.current = true;
-          cameraStartAttempts.current = 0;
-        }
-      }, 500);
-    }
-  }, [startImmediately]);
+  }, [cameraPermissionStatus, isMobileDevice]);
   
   useEffect(() => {
     if (cameraActive) {
@@ -241,7 +225,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
     setAmount('');
     setNote('');
     setScanStage('scan');
-    setCameraActive(true); // Go back to active scanning
+    setCameraActive(false);
   };
 
   const retryCamera = () => {
@@ -261,6 +245,13 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
         }, 500);
       }
     }, 800);
+  };
+  
+  const startScanner = () => {
+    console.log('Starting scanner with facing mode:', facingMode);
+    setScannerError(null);
+    setCameraActive(true);
+    cameraStartAttempts.current = 0;
   };
   
   const toggleCamera = () => {
@@ -286,6 +277,10 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
     if (scannerRef.current) {
       scannerRef.current.forceStop();
     }
+  };
+  
+  const simulateScan = () => {
+    handleQrCodeScan('upi://pay?pa=test@merchant.upi&pn=Test%20Merchant&am=599.00');
   };
   
   return (
@@ -359,14 +354,25 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
                     </p>
                   )}
                   
-                  <Button 
-                    onClick={() => setCameraActive(true)} 
-                    className="bg-flexipay-purple hover:bg-flexipay-purple/90 text-white font-medium"
-                    disabled={cameraPermissionStatus === 'denied'}
-                  >
-                    <Camera className="h-4 w-4 mr-2" />
-                    Start Camera
-                  </Button>
+                  <div className="flex flex-col space-y-2 w-full max-w-[200px]">
+                    <Button 
+                      onClick={startScanner} 
+                      className="bg-flexipay-purple hover:bg-flexipay-purple/90 text-white font-medium"
+                      disabled={cameraPermissionStatus === 'denied'}
+                    >
+                      <Camera className="h-4 w-4 mr-2" />
+                      Start Camera
+                    </Button>
+                    
+                    <Button 
+                      onClick={simulateScan} 
+                      variant="outline"
+                      className="bg-transparent border border-white/20 text-gray-300 hover:bg-white/10"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Simulate Scan
+                    </Button>
+                  </div>
                   
                   {cameraPermissionStatus === 'denied' && (
                     <p className="text-xs text-gray-400 mt-2">
@@ -420,10 +426,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds, startImmediately =
       </CardContent>
       {scanStage === 'confirm' && (
         <CardFooter className="flex gap-2 p-4 pt-0">
-          <Button variant="outline" onClick={() => {
-            setScanStage('scan');
-            setCameraActive(true);
-          }} className="flex-1 border-flexipay-purple/30 dark:bg-gray-700 dark:text-white dark:border-gray-600 hover:bg-flexipay-purple/10">
+          <Button variant="outline" onClick={() => setScanStage('scan')} className="flex-1 border-flexipay-purple/30 dark:bg-gray-700 dark:text-white dark:border-gray-600 hover:bg-flexipay-purple/10">
             Cancel
           </Button>
           <Button className="bg-gradient-to-r from-flexipay-purple to-flexipay-blue hover:opacity-90 text-white flex-1 font-medium" onClick={handlePayment}>
