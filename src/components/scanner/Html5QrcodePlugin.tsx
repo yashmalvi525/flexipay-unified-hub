@@ -36,8 +36,10 @@ const Html5QrcodePlugin = forwardRef<any, Html5QrcodePluginProps>((props, ref) =
       disableFlip
     };
 
+    // Create config for HTML5QrCode constructor
     const createConfig = {
       formatsToSupport: [0, 12], // QR Code and UPI QR specifically
+      verbose: true, // Add the missing verbose property
     };
 
     // Clear any previous instances
