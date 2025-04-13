@@ -1,14 +1,12 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UpiSelector, UpiId } from '../upi/UpiSelector';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Camera, RefreshCw, Ban, CheckCircle, Smartphone, 
-  CameraOff, ArrowLeft, AlertCircle
-} from 'lucide-react';
-import Html5QrcodePlugin from './Html5QrcodePlugin';
+import { Camera, RefreshCw, Ban, CheckCircle, Smartphone, CameraOff, ArrowLeft } from 'lucide-react';
+import Html5QrcodePlugin from '../scanner/Html5QrcodePlugin';
 
 interface QrScannerProps {
   upiIds: UpiId[];
@@ -27,10 +25,8 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   const [facingMode, setFacingMode] = useState('environment');
   const { toast } = useToast();
   const scannerRef = useRef<any>(null);
-  const hasInitialized = useRef(false);
-  const cameraStartAttempts = useRef(0);
-  const mountedRef = useRef(false);
 
+  // Detect if user is on a mobile device
   useEffect(() => {
     const checkMobile = () => {
       const userAgent = navigator.userAgent || navigator.vendor;
@@ -40,34 +36,23 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     };
     
     checkMobile();
-    mountedRef.current = true;
-    
-    return () => {
-      mountedRef.current = false;
-    };
   }, []);
   
+  // Check camera permissions when component mounts
   useEffect(() => {
     const checkCameraPermission = async () => {
       try {
+        // Check if the browser supports the permissions API
         if (navigator.permissions && navigator.permissions.query) {
           const result = await navigator.permissions.query({ name: 'camera' as PermissionName });
           
           console.log('Camera permission status:', result.state);
           setCameraPermissionStatus(result.state as 'prompt' | 'granted' | 'denied');
           
+          // Listen for permission changes
           result.onchange = () => {
             console.log('Camera permission changed to:', result.state);
             setCameraPermissionStatus(result.state as 'prompt' | 'granted' | 'denied');
-            
-            if (result.state === 'granted' && mountedRef.current && !cameraActive) {
-              setTimeout(() => {
-                if (mountedRef.current) {
-                  console.log('Permission just granted, starting camera');
-                  setCameraActive(true);
-                }
-              }, 500);
-            }
           };
         }
       } catch (error) {
@@ -78,50 +63,16 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     checkCameraPermission();
   }, []);
   
-  useEffect(() => {
-    if (!hasInitialized.current && cameraPermissionStatus === 'granted' && isMobileDevice) {
-      console.log('Auto-starting camera on mobile device with granted permission');
-      setTimeout(() => {
-        if (mountedRef.current) {
-          setCameraActive(true);
-          cameraStartAttempts.current = 0;
-        }
-      }, 800);
-      hasInitialized.current = true;
-    }
-  }, [cameraPermissionStatus, isMobileDevice]);
-  
-  useEffect(() => {
-    if (cameraActive) {
-      const timeoutId = setTimeout(() => {
-        if (!scannerRef.current || scannerError) {
-          console.log('Camera did not start properly, attempting retry');
-          cameraStartAttempts.current += 1;
-          
-          if (cameraStartAttempts.current <= 3) {
-            retryCamera();
-          } else {
-            toast({
-              title: "Camera Issues",
-              description: "Could not start camera after multiple attempts. Please try refreshing the page.",
-              variant: "destructive"
-            });
-          }
-        }
-      }, 3000);
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [cameraActive, scannerError]);
-  
-  const handleQrCodeScan = useCallback((decodedText: string) => {
+  const handleQrCodeScan = (decodedText: string) => {
     console.log('QR code detected:', decodedText);
     
     try {
       const scannedData = decodedText;
       console.log('Scanned data:', scannedData);
       
+      // Simple parsing for demo - in reality, use proper URI parsing
       if (scannedData.includes('upi://pay')) {
+        // Parse merchant data
         const merchantId = scannedData.includes('pa=') ? 
           scannedData.split('pa=')[1].split('&')[0] : 'merchant@upi';
         
@@ -140,12 +91,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
           setAmount(scannedAmount);
         }
         
+        // Move to confirmation stage
         setScanStage('confirm');
         setCameraActive(false);
-        
-        if (scannerRef.current) {
-          scannerRef.current.forceStop();
-        }
         
         toast({
           title: "QR Code Detected",
@@ -166,62 +114,42 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
         variant: "destructive"
       });
     }
-  }, [toast]);
+  };
 
-  const handleQrCodeError = useCallback((error: any) => {
+  const handleQrCodeError = (error: any) => {
     console.error('QR Scanner error:', error);
-    
-    if (
-      (typeof error === 'string' && error.includes('No MultiFormat Readers')) ||
-      (error && error.message && error.message.includes('No MultiFormat Readers'))
-    ) {
-      return;
-    }
     
     let errorMessage = 'Could not access camera. Please check permissions.';
     
-    if (error.name === "NotAllowedError" || (error.message && error.message.includes("Permission denied"))) {
+    if (error.name === "NotAllowedError" || error.message.includes("Permission denied")) {
       errorMessage = 'Camera access denied. Please enable camera permissions in your browser settings.';
       setCameraPermissionStatus('denied');
     } else if (error.message && error.message.includes('insecure')) {
       errorMessage = 'Camera access requires HTTPS. Please ensure you are using a secure connection.';
     } else if (error.name === "NotFoundError") {
       errorMessage = 'No camera found. Please make sure your device has a camera.';
-    } else if (error.name === "NotReadableError" || (error.message && error.message.includes('starting video source'))) {
+    } else if (error.name === "NotReadableError") {
       errorMessage = 'Camera is in use by another application. Please close other apps using the camera.';
     }
     
     setScannerError(errorMessage);
+    setCameraActive(false);
     
-    if (error.name !== "NotReadableError" && !(error.message && error.message.includes('starting video source'))) {
-      toast({
-        title: "Camera Error",
-        description: errorMessage,
-        variant: "destructive"
-      });
-    }
-    
-    if (
-      error.name === "NotReadableError" || 
-      (error.message && error.message.includes('starting video source')) ||
-      (error.message && error.message.includes('Camera access is denied'))
-    ) {
-      console.log('Scheduling automatic retry for camera');
-      setTimeout(() => {
-        if (mountedRef.current && scannerRef.current) {
-          console.log('Automatically retrying camera');
-          retryCamera();
-        }
-      }, 1500);
-    }
-  }, [toast]);
+    toast({
+      title: "Camera Error",
+      description: errorMessage,
+      variant: "destructive"
+    });
+  };
 
   const handlePayment = () => {
+    // In a real app, this would process the payment
     toast({
       title: "Payment Successful",
       description: `₹${amount} paid to ${merchantInfo.name} using ${selectedUpiId}`,
     });
     
+    // Reset the form
     setAmount('');
     setNote('');
     setScanStage('scan');
@@ -229,29 +157,14 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   };
 
   const retryCamera = () => {
-    console.log('Manually retrying camera');
     setScannerError(null);
-    setCameraActive(false);
-    
-    setTimeout(() => {
-      if (mountedRef.current) {
-        setCameraActive(true);
-        
-        setTimeout(() => {
-          if (scannerRef.current && mountedRef.current) {
-            console.log('Restarting camera via ref');
-            scannerRef.current.restart();
-          }
-        }, 500);
-      }
-    }, 800);
+    setCameraActive(true);
   };
   
   const startScanner = () => {
     console.log('Starting scanner with facing mode:', facingMode);
     setScannerError(null);
     setCameraActive(true);
-    cameraStartAttempts.current = 0;
   };
   
   const toggleCamera = () => {
@@ -260,10 +173,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     setFacingMode(newMode);
     
     if (cameraActive && scannerRef.current) {
+      setCameraActive(false);
       setTimeout(() => {
-        if (scannerRef.current) {
-          scannerRef.current.restart();
-        }
+        setCameraActive(true);
       }, 300);
     }
   };
@@ -273,12 +185,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
     if (scanStage === 'confirm') {
       setScanStage('scan');
     }
-    
-    if (scannerRef.current) {
-      scannerRef.current.forceStop();
-    }
   };
   
+  // Simulate a scan for testing - this would be removed in production
   const simulateScan = () => {
     handleQrCodeScan('upi://pay?pa=test@merchant.upi&pn=Test%20Merchant&am=599.00');
   };
@@ -299,13 +208,14 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                   {!scannerError ? (
                     <div className="w-full h-full relative">
                       <Html5QrcodePlugin
-                        fps={15}
+                        fps={10}
                         qrCodeSuccessCallback={handleQrCodeScan}
                         qrCodeErrorCallback={handleQrCodeError}
                         facingMode={facingMode}
                         ref={scannerRef}
                       />
                       
+                      {/* Targeting frame overlay */}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                         <div className="w-4/5 h-4/5 border-2 border-white/90 rounded-lg"></div>
                       </div>
@@ -364,6 +274,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                       Start Camera
                     </Button>
                     
+                    {/* For testing only */}
                     <Button 
                       onClick={simulateScan} 
                       variant="outline"

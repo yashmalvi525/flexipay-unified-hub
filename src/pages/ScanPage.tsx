@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { QrScanner } from '@/components/scanner/QrScanner';
 import { mockUpiIds } from '@/utils/mock-data';
@@ -7,36 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { QrCode, ArrowUp, ArrowDown, Scan } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useToast } from '@/hooks/use-toast';
 
 const ScanPage = () => {
   const isMobile = useIsMobile();
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    // Inform user about camera permissions on page load
-    if (isMobile) {
-      const checkPermissions = async () => {
-        try {
-          if (navigator.permissions && navigator.permissions.query) {
-            const result = await navigator.permissions.query({ name: 'camera' as PermissionName });
-            
-            if (result.state === 'denied') {
-              toast({
-                title: "Camera Permission Denied",
-                description: "Please enable camera access in your browser settings to scan QR codes.",
-                variant: "destructive"
-              });
-            }
-          }
-        } catch (error) {
-          console.error('Error checking camera permission:', error);
-        }
-      };
-      
-      checkPermissions();
-    }
-  }, [isMobile, toast]);
   
   return (
     <AppLayout>
