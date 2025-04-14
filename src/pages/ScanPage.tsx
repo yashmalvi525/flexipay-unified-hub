@@ -1,15 +1,49 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { QrScanner } from '@/components/scanner/QrScanner';
 import { mockUpiIds } from '@/utils/mock-data';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { QrCode, ArrowUp, ArrowDown, Scan } from 'lucide-react';
+import { QrCode, ArrowUp, ArrowDown, Scan, Download } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { isPWAInstallable, installPWA } from '@/utils/pwa-utils';
 
 const ScanPage = () => {
   const isMobile = useIsMobile();
+  const [canInstall, setCanInstall] = useState(false);
+  
+  // Check if the app can be installed
+  useEffect(() => {
+    const checkInstallability = () => {
+      const installable = isPWAInstallable();
+      setCanInstall(installable);
+    };
+    
+    checkInstallability();
+    
+    // Listen for changes in installability
+    const handleBeforeInstallPrompt = () => {
+      setCanInstall(true);
+    };
+    
+    document.addEventListener('pwaInstallable', handleBeforeInstallPrompt);
+    
+    return () => {
+      document.removeEventListener('pwaInstallable', handleBeforeInstallPrompt);
+    };
+  }, []);
+  
+  const handleInstall = async () => {
+    try {
+      const installed = await installPWA();
+      if (installed) {
+        setCanInstall(false);
+      }
+    } catch (error) {
+      console.error('Error installing PWA:', error);
+    }
+  };
   
   return (
     <AppLayout>
@@ -23,6 +57,20 @@ const ScanPage = () => {
             Quick and secure payments with any UPI QR code
           </p>
         </div>
+        
+        {canInstall && (
+          <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover dark:from-flexipay-blue/20 dark:to-flexipay-blue/10 dark:border-flexipay-blue/40 shadow-sm">
+            <CardContent className="p-3 flex flex-col items-center justify-center">
+              <Button 
+                className="w-full bg-flexipay-blue text-white hover:bg-flexipay-blue/90 font-semibold shadow-sm"
+                onClick={handleInstall}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span>Add to Home Screen</span>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
         
         <div className="grid grid-cols-2 gap-3 mb-4">
           <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover dark:from-flexipay-blue/20 dark:to-flexipay-blue/10 dark:border-flexipay-blue/40 shadow-sm">
@@ -48,7 +96,7 @@ const ScanPage = () => {
           <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 rounded-full blur-xl dark:from-flexipay-purple/30 dark:to-flexipay-blue/30"></div>
           <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-gradient-to-tr from-flexipay-blue/20 to-flexipay-purple/20 rounded-full blur-xl dark:from-flexipay-blue/30 dark:to-flexipay-purple/30"></div>
           
-          <QrScanner upiIds={mockUpiIds} />
+          <QrScanner upiIds={mockUpiIds} startImmediately={true} />
         </div>
         
         <div className="text-center text-xs text-muted-foreground dark:text-gray-400 px-4 py-2 bg-muted dark:bg-gray-800/70 rounded-full inline-block mx-auto">

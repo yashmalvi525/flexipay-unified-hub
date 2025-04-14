@@ -6,8 +6,8 @@
   "start_url": "/",
   "id": "/",
   "display": "standalone",
-  "background_color": "#f8f9fa",
-  "theme_color": "#7c3aed",
+  "background_color": "#ffffff",
+  "theme_color": "#2E86C1",
   "orientation": "portrait",
   "categories": ["finance", "payments"],
   "icons": [

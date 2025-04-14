@@ -28,21 +28,7 @@ const Html5QrcodePlugin = forwardRef<any, Html5QrcodePluginProps>((props, ref) =
   let html5QrCode: Html5Qrcode;
 
   useEffect(() => {
-    // when component mounts
-    const config = {
-      fps,
-      qrbox,
-      aspectRatio,
-      disableFlip
-    };
-
-    // Create config for HTML5QrCode constructor
-    const createConfig = {
-      formatsToSupport: [0, 12], // QR Code and UPI QR specifically
-      verbose: true, // Add the missing verbose property
-    };
-
-    // Clear any previous instances
+    // Clear any previous instances first
     const qrCodeContainer = document.getElementById(qrcodeRegionId);
     if (qrCodeContainer) {
       while (qrCodeContainer.firstChild) {
@@ -50,27 +36,53 @@ const Html5QrcodePlugin = forwardRef<any, Html5QrcodePluginProps>((props, ref) =
       }
     }
 
+    // Create config for HTML5QrCode constructor
+    const createConfig = {
+      formatsToSupport: [0, 12], // QR Code and UPI QR specifically
+      verbose: false, // Disable verbose logging
+    };
+
     // Instantiate the QR code scanner
     html5QrCode = new Html5Qrcode(qrcodeRegionId, createConfig);
     
-    html5QrCode.start(
-      { facingMode },
-      config,
-      qrCodeSuccessCallback,
-      (errorMessage) => {
-        // This is a workaround to avoid constantly firing errors
-        if (errorMessage.includes("No MultiFormat Readers")) {
-          return;
+    const scanConfig = {
+      fps,
+      qrbox,
+      aspectRatio,
+      disableFlip
+    };
+
+    // Attempt to start the scanner
+    const startScanner = () => {
+      console.log("Starting QR scanner with facing mode:", facingMode);
+      html5QrCode.start(
+        { facingMode },
+        scanConfig,
+        qrCodeSuccessCallback,
+        (errorMessage) => {
+          // Ignore specific errors that happen frequently during normal operation
+          if (
+            errorMessage.includes("No MultiFormat Readers") ||
+            errorMessage.includes("Failed to execute 'drawImage'") ||
+            errorMessage.includes("No barcode or QR code detected")
+          ) {
+            return;
+          }
+          
+          qrCodeErrorCallback(errorMessage, errorMessage);
         }
-        
-        qrCodeErrorCallback(errorMessage, errorMessage);
-      }
-    ).catch((err) => {
-      qrCodeErrorCallback(`Unable to start scanning: ${err}`, err);
-    });
+      ).catch((err) => {
+        console.error("QR Scanner start error:", err);
+        qrCodeErrorCallback(`Unable to start scanning: ${err}`, err);
+      });
+    };
+
+    // Ensure we start the scanner after a short delay to allow the DOM to fully load
+    setTimeout(startScanner, 100);
 
     // cleanup function when component will unmount
     return () => {
+      console.log("Cleaning up QR scanner");
       if (html5QrCode && html5QrCode.isScanning) {
         html5QrCode.stop().catch(err => console.error("Failed to stop scanner", err));
       }
@@ -79,26 +91,49 @@ const Html5QrcodePlugin = forwardRef<any, Html5QrcodePluginProps>((props, ref) =
 
   useImperativeHandle(ref, () => ({
     restart: () => {
-      if (html5QrCode && html5QrCode.isScanning) {
-        html5QrCode.stop().then(() => {
-          const config = {
+      console.log("Attempting to restart QR scanner");
+      if (html5QrCode) {
+        if (html5QrCode.isScanning) {
+          html5QrCode.stop().then(() => {
+            const scanConfig = {
+              fps,
+              qrbox,
+              aspectRatio,
+              disableFlip
+            };
+            
+            console.log("Restarting QR scanner with facing mode:", facingMode);
+            html5QrCode.start(
+              { facingMode },
+              scanConfig,
+              qrCodeSuccessCallback,
+              qrCodeErrorCallback
+            ).catch(err => {
+              console.error("QR Scanner restart error:", err);
+              qrCodeErrorCallback(`Unable to restart scanning: ${err}`, err);
+            });
+          }).catch(err => {
+            console.error("Failed to stop scanner before restarting", err);
+          });
+        } else {
+          const scanConfig = {
             fps,
             qrbox,
             aspectRatio,
             disableFlip
           };
           
+          console.log("Starting QR scanner (not previously scanning) with facing mode:", facingMode);
           html5QrCode.start(
             { facingMode },
-            config,
+            scanConfig,
             qrCodeSuccessCallback,
             qrCodeErrorCallback
           ).catch(err => {
-            qrCodeErrorCallback(`Unable to restart scanning: ${err}`, err);
+            console.error("QR Scanner start error:", err);
+            qrCodeErrorCallback(`Unable to start scanning: ${err}`, err);
           });
-        }).catch(err => {
-          console.error("Failed to stop scanner before restarting", err);
-        });
+        }
       }
     }
   }));
