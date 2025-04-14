@@ -50,16 +50,16 @@ const ScanPage = () => {
       <div className="space-y-6 animate-fade-in px-2 sm:px-0 max-w-lg mx-auto">
         <div className="text-center">
           <h1 className="text-xl sm:text-3xl font-bold mb-2 flex items-center justify-center">
-            <Scan className="h-6 w-6 mr-2 text-flexipay-purple dark:text-flexipay-light-purple" />
-            <span className="text-gradient-primary dark:text-white">Scan & Pay</span>
+            <Scan className="h-6 w-6 mr-2 text-flexipay-neon-purple" />
+            <span className="text-gradient-primary">Scan & Pay</span>
           </h1>
-          <p className="text-muted-foreground dark:text-gray-300 text-sm sm:text-base">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Quick and secure payments with any UPI QR code
           </p>
         </div>
         
         {canInstall && (
-          <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover dark:from-flexipay-blue/20 dark:to-flexipay-blue/10 dark:border-flexipay-blue/40 shadow-sm">
+          <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover shadow-sm">
             <CardContent className="p-3 flex flex-col items-center justify-center">
               <Button 
                 className="w-full bg-flexipay-blue text-white hover:bg-flexipay-blue/90 font-semibold shadow-sm"
@@ -73,7 +73,7 @@ const ScanPage = () => {
         )}
         
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover dark:from-flexipay-blue/20 dark:to-flexipay-blue/10 dark:border-flexipay-blue/40 shadow-sm">
+          <Card className="bg-gradient-to-br from-flexipay-blue/20 to-flexipay-blue/5 border-flexipay-blue/30 card-hover shadow-sm">
             <CardContent className="p-3 flex flex-col items-center justify-center">
               <Button className="w-full bg-flexipay-blue text-white hover:bg-flexipay-blue/90 font-semibold shadow-sm">
                 <ArrowUp className="h-4 w-4 mr-2" />
@@ -82,7 +82,7 @@ const ScanPage = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-flexipay-purple/20 to-flexipay-purple/5 border-flexipay-purple/30 card-hover dark:from-flexipay-purple/20 dark:to-flexipay-purple/10 dark:border-flexipay-purple/40 shadow-sm">
+          <Card className="bg-gradient-to-br from-flexipay-purple/20 to-flexipay-purple/5 border-flexipay-purple/30 card-hover shadow-sm">
             <CardContent className="p-3 flex flex-col items-center justify-center">
               <Button className="w-full bg-flexipay-purple text-white hover:bg-flexipay-purple/90 font-semibold shadow-sm">
                 <ArrowDown className="h-4 w-4 mr-2" />
@@ -92,14 +92,14 @@ const ScanPage = () => {
           </Card>
         </div>
         
-        <div className="relative overflow-hidden rounded-xl border-2 border-flexipay-purple/30 shadow-lg dark:border-flexipay-purple/40">
-          <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 rounded-full blur-xl dark:from-flexipay-purple/30 dark:to-flexipay-blue/30"></div>
-          <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-gradient-to-tr from-flexipay-blue/20 to-flexipay-purple/20 rounded-full blur-xl dark:from-flexipay-blue/30 dark:to-flexipay-purple/30"></div>
+        <div className="relative overflow-hidden rounded-xl border-2 border-flexipay-neon-purple/40 shadow-lg">
+          <div className="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 rounded-full blur-xl"></div>
+          <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-gradient-to-tr from-flexipay-blue/20 to-flexipay-purple/20 rounded-full blur-xl"></div>
           
           <QrScanner upiIds={mockUpiIds} startImmediately={true} />
         </div>
         
-        <div className="text-center text-xs text-muted-foreground dark:text-gray-400 px-4 py-2 bg-muted dark:bg-gray-800/70 rounded-full inline-block mx-auto">
+        <div className="text-center text-xs text-muted-foreground px-4 py-2 bg-muted rounded-full inline-block mx-auto">
           Secure QR payments powered by UPI
         </div>
       </div>

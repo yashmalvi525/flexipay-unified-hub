@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -235,6 +236,42 @@
   .provider-logo-bhim {
     @apply bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400;
   }
+  
+  /* Dark neon style components */
+  .neon-card {
+    @apply relative bg-flexipay-dark-card rounded-xl text-white overflow-hidden;
+  }
+  
+  .neon-card::before {
+    content: '';
+    @apply absolute inset-0 -z-10 rounded-xl p-[1.5px] bg-gradient-to-r from-flexipay-neon-purple via-flexipay-glow-purple to-transparent opacity-60;
+  }
+  
+  .neon-button {
+    @apply relative bg-flexipay-dark-bg text-flexipay-neon-purple rounded-lg border border-flexipay-neon-purple/30 hover:bg-flexipay-neon-purple/10 transition-all overflow-hidden;
+  }
+  
+  .neon-button::after {
+    content: '';
+    @apply absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-flexipay-neon-purple/5 to-transparent opacity-0 hover:opacity-30 transition-opacity;
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 5px rgba(196, 165, 255, 0.7);
+  }
+  
+  .glow-border {
+    @apply border border-flexipay-neon-purple/50 shadow-[0_0_10px_rgba(196,165,255,0.3)];
+  }
+  
+  .feature-button {
+    @apply relative w-14 h-14 rounded-full flex items-center justify-center bg-flexipay-dark-bg hover:scale-105 transition-all duration-300;
+  }
+  
+  .feature-button::before {
+    content: '';
+    @apply absolute inset-0 rounded-full bg-gradient-to-br from-flexipay-neon-purple/30 to-transparent opacity-40 hover:opacity-80 transition-all;
+  }
 }
 
 @keyframes shimmer {
@@ -293,5 +330,22 @@
   
   .align-text-icon {
     @apply inline-flex items-center;
+  }
+  
+  .glow-effect {
+    @apply relative;
+  }
+  
+  .glow-effect::after {
+    content: '';
+    @apply absolute inset-0 rounded-xl bg-flexipay-neon-purple/20 blur-md opacity-0 transition-opacity hover:opacity-100;
+  }
+  
+  .glow-text-effect {
+    text-shadow: 0 0 8px rgba(196, 165, 255, 0.8);
+  }
+  
+  .glow-border-effect {
+    box-shadow: 0 0 10px 1px rgba(196, 165, 255, 0.3);
   }
 }

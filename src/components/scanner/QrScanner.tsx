@@ -15,7 +15,7 @@ interface QrScannerProps {
 
 export const QrScanner: React.FC<QrScannerProps> = ({ 
   upiIds,
-  startImmediately = false
+  startImmediately = true // Changed default to true
 }) => {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
@@ -232,14 +232,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({
     }
   };
   
-  // Simulate a scan for testing - this would be removed in production
-  const simulateScan = () => {
-    handleQrCodeScan('upi://pay?pa=test@merchant.upi&pn=Test%20Merchant&am=599.00');
-  };
-  
   return (
-    <Card className="max-w-md mx-auto bg-white dark:bg-gray-800/95 shadow-md border-none rounded-xl overflow-hidden">
-      <CardHeader className="p-4 bg-gradient-to-r from-flexipay-purple/90 to-flexipay-blue/90 text-white">
+    <Card className="max-w-md mx-auto bg-flexipay-dark-card text-white border border-flexipay-neon-purple/30 rounded-xl overflow-hidden shadow-lg shadow-flexipay-neon-purple/10">
+      <CardHeader className="p-4 bg-gradient-to-r from-[#673ab7]/90 to-[#9370DB]/90 text-white border-b border-flexipay-neon-purple/20">
         <CardTitle className="text-xl text-center">
           {scanStage === 'scan' ? 'Scan QR Code' : 'Confirm Payment'}
         </CardTitle>
@@ -247,7 +242,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({
       <CardContent className="p-4 pt-4">
         {scanStage === 'scan' ? (
           <div className="space-y-4">
-            <div className="aspect-square bg-black rounded-lg flex items-center justify-center relative overflow-hidden border-2 border-dashed border-flexipay-purple/50">
+            <div className="aspect-square bg-black rounded-lg flex items-center justify-center relative overflow-hidden border-2 border-flexipay-neon-purple/30">
               {cameraActive ? (
                 <>
                   {!scannerError ? (
@@ -262,14 +257,14 @@ export const QrScanner: React.FC<QrScannerProps> = ({
                       
                       {/* Targeting frame overlay */}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                        <div className="w-4/5 h-4/5 border-2 border-white/90 rounded-lg"></div>
+                        <div className="w-4/5 h-4/5 border-2 border-flexipay-neon-purple/80 rounded-lg animate-glow-line"></div>
                       </div>
                     </div>
                   ) : (
                     <div className="text-center p-4 w-full h-full flex flex-col items-center justify-center">
                       <Ban className="h-12 w-12 text-red-500 mx-auto mb-2" />
                       <p className="text-red-400 font-medium mb-2">{scannerError}</p>
-                      <Button variant="outline" onClick={retryCamera} className="mt-2 bg-white dark:bg-gray-700 dark:text-white hover:bg-flexipay-purple/10">
+                      <Button variant="outline" onClick={retryCamera} className="mt-2 bg-transparent border-flexipay-neon-purple/50 text-flexipay-neon-purple hover:bg-flexipay-neon-purple/10">
                         <RefreshCw className="h-4 w-4 mr-2" />
                         Retry Camera
                       </Button>
@@ -279,7 +274,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="bg-black/60 backdrop-blur-sm border-white/20 text-white hover:bg-black/80"
+                      className="bg-black/60 backdrop-blur-sm border-flexipay-neon-purple/30 text-white hover:bg-black/80"
                       onClick={toggleCamera}
                     >
                       <Smartphone className="h-4 w-4" />
@@ -287,7 +282,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="bg-black/60 backdrop-blur-sm border-white/20 text-white hover:bg-black/80"
+                      className="bg-black/60 backdrop-blur-sm border-flexipay-neon-purple/30 text-white hover:bg-black/80"
                       onClick={cancelScan}
                     >
                       <CameraOff className="h-4 w-4" />
@@ -295,8 +290,8 @@ export const QrScanner: React.FC<QrScannerProps> = ({
                   </div>
                 </>
               ) : (
-                <div className="text-center p-6 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                  <Camera className="h-16 w-16 text-flexipay-purple/80 mx-auto mb-3" />
+                <div className="text-center p-6 w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-flexipay-dark-card to-black">
+                  <Camera className="h-16 w-16 text-flexipay-neon-purple mx-auto mb-3" />
                   
                   {cameraPermissionStatus === 'denied' ? (
                     <>
@@ -318,18 +313,6 @@ export const QrScanner: React.FC<QrScannerProps> = ({
                       <Camera className="h-4 w-4 mr-2" />
                       Start Camera
                     </Button>
-                    
-                    {/* For testing only - don't show in production */}
-                    {!startImmediately && (
-                      <Button 
-                        onClick={simulateScan} 
-                        variant="outline"
-                        className="bg-transparent border border-white/20 text-gray-300 hover:bg-white/10"
-                      >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        <span>Simulate Scan</span>
-                      </Button>
-                    )}
                   </div>
                   
                   {cameraPermissionStatus === 'denied' && (
@@ -343,26 +326,26 @@ export const QrScanner: React.FC<QrScannerProps> = ({
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="p-4 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 dark:from-flexipay-purple/30 dark:to-flexipay-blue/30 rounded-lg text-center border border-flexipay-purple/20">
-              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-flexipay-purple dark:text-flexipay-light-purple" />
-              <h3 className="font-medium text-flexipay-purple dark:text-flexipay-light-purple text-lg">{merchantInfo.name}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded-full inline-block mt-1">{merchantInfo.id}</p>
+            <div className="p-4 bg-gradient-to-br from-flexipay-purple/20 to-flexipay-blue/20 rounded-lg text-center border border-flexipay-neon-purple/30">
+              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-flexipay-neon-purple" />
+              <h3 className="font-medium text-flexipay-neon-purple text-lg">{merchantInfo.name}</h3>
+              <p className="text-sm text-gray-300 bg-black/20 px-2 py-0.5 rounded-full inline-block mt-1">{merchantInfo.id}</p>
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1 dark:text-white">Amount (₹)</label>
+              <label className="block text-sm font-medium mb-1 text-white">Amount (₹)</label>
               <Input 
                 type="number" 
                 value={amount} 
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Enter amount"
                 required
-                className="dark:bg-gray-700 dark:text-white border-flexipay-purple/30"
+                className="bg-gray-800 text-white border-flexipay-neon-purple/30"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1 dark:text-white">Pay from</label>
+              <label className="block text-sm font-medium mb-1 text-white">Pay from</label>
               <UpiSelector 
                 upiIds={upiIds}
                 selectedId={selectedUpiId}
@@ -371,12 +354,12 @@ export const QrScanner: React.FC<QrScannerProps> = ({
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1 dark:text-white">Note (Optional)</label>
+              <label className="block text-sm font-medium mb-1 text-white">Note (Optional)</label>
               <Input 
                 value={note} 
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Add a note"
-                className="dark:bg-gray-700 dark:text-white border-flexipay-purple/30"
+                className="bg-gray-800 text-white border-flexipay-neon-purple/30"
               />
             </div>
           </div>
@@ -387,7 +370,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({
           <Button variant="outline" onClick={() => {
             setScanStage('scan');
             setCameraActive(true);
-          }} className="flex-1 border-flexipay-purple/30 dark:bg-gray-700 dark:text-white dark:border-gray-600 hover:bg-flexipay-purple/10">
+          }} className="flex-1 border-flexipay-neon-purple/30 bg-transparent text-white hover:bg-flexipay-neon-purple/10">
             Cancel
           </Button>
           <Button className="bg-gradient-to-r from-flexipay-purple to-flexipay-blue hover:opacity-90 text-white flex-1 font-medium" onClick={handlePayment}>
