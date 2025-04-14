@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -162,80 +161,39 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold truncate dark:text-white">
-                {isIncoming ? 'Received' : 'Sent'} Payment
+                {isIncoming ? 'Received from' : 'Sent to'} {isIncoming ? displaySenderName : displayReceiverName}
               </h3>
               <p className={`font-medium whitespace-nowrap ${amountColor} ${amountColorDark}`}>
                 {isIncoming ? '+ ' : '- '}₹{amount.toLocaleString()}
               </p>
             </div>
             
-            <div className="mt-1 text-xs sm:text-sm flex flex-wrap items-center">
-              <div className="provider-logo mr-1.5">
-                <ProviderLogo />
-              </div>
-              
-              <div className="flex-1 flex items-center text-muted-foreground overflow-hidden">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">
-                        {displaySenderName}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{displaySenderName}</p>
-                      {displaySenderUpiId && <p className="text-xs">{displaySenderUpiId}</p>}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                
-                <ArrowRight className="h-3.5 w-3.5 mx-1.5 shrink-0 dark:text-gray-400" />
-                
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">
-                        {displayReceiverName}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{displayReceiverName}</p>
-                      {displayReceiverUpiId && <p className="text-xs">{displayReceiverUpiId}</p>}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </div>
-            
-            {/* UPI IDs display with better formatting */}
-            <div className="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
+            <div className="mt-2 space-y-1.5">
               {displaySenderUpiId && (
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5 truncate max-w-[45%]">
-                  <span className="text-gray-700 dark:text-gray-300">{displaySenderUpiId}</span>
+                <div className="upi-id-tag">
+                  <span className="mr-1 opacity-75">From:</span>
+                  {displaySenderUpiId}
                 </div>
               )}
               
-              {displaySenderUpiId && displayReceiverUpiId && (
-                <ArrowRight className="h-2.5 w-2.5 shrink-0 text-gray-400 dark:text-gray-500" />
-              )}
-              
               {displayReceiverUpiId && (
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5 truncate max-w-[45%]">
-                  <span className="text-gray-700 dark:text-gray-300">{displayReceiverUpiId}</span>
+                <div className="upi-id-tag">
+                  <span className="mr-1 opacity-75">To:</span>
+                  {displayReceiverUpiId}
                 </div>
               )}
             </div>
 
-            <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground dark:text-gray-400">
+            <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
               <div className="flex items-center">
                 <Clock className="h-3 w-3 mr-1" />
                 <p>{timeAgo}</p>
               </div>
               
               {note && (
-                <div className="flex items-center bg-muted dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none">
-                  <Banknote className="h-3 w-3 mr-1 text-gray-500 dark:text-gray-400" />
-                  <p className="truncate dark:text-gray-300">{note}</p>
+                <div className="flex items-center bg-muted/50 px-2 py-0.5 rounded-full text-xs truncate max-w-[120px] sm:max-w-none">
+                  <Banknote className="h-3 w-3 mr-1 opacity-50" />
+                  <p className="truncate">{note}</p>
                 </div>
               )}
             </div>

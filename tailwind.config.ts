@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -69,7 +68,12 @@ export default {
 					blue: '#33C3F0',
 					'dark-gray': '#222222',
 					'light-gray': '#f5f5f7'
-				}
+				},
+				'flexipay-bg': '#f5f7fa',
+				'flexipay-purple': '#673ab7',
+				'flexipay-blue': '#0f4d92',
+				'flexipay-green': '#00c853',
+				'flexipay-text': '#1a1a1a'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
