@@ -1,3 +1,4 @@
+
 import { UpiId } from "@/components/upi/UpiSelector";
 import { Transaction } from "@/components/transactions/TransactionCard";
 import { subDays, subHours, subMinutes } from 'date-fns';
@@ -118,6 +119,14 @@ export const mockBalanceData = [
   { date: "Apr 4", amount: 16100 },
   { date: "Apr 5", amount: 18600 },
   { date: "Apr 6", amount: 18100 }
+];
+
+// Mock spending by UPI
+export const mockSpendingByUpi = [
+  { upiId: "alice@sbi", spent: 1369, received: 0 },
+  { upiId: "alice@hdfc", spent: 0, received: 7500 },
+  { upiId: "alice@icici", spent: 350, received: 0 },
+  { upiId: "alice@paytm", spent: 899, received: 0 },
 ];
 
 // Current total balance
