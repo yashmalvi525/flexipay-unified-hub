@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowDownLeft, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 export interface Transaction {
   id: string;
@@ -28,13 +27,9 @@ export interface Transaction {
 
 interface TransactionCardProps {
   transaction: Transaction;
-  showFullDetails?: boolean;
 }
 
-export const TransactionCard: React.FC<TransactionCardProps> = ({ 
-  transaction,
-  showFullDetails = false
-}) => {
+export const TransactionCard: React.FC<TransactionCardProps> = ({ transaction }) => {
   const { 
     type, 
     amount, 
@@ -49,7 +44,6 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
     upiId = ''
   } = transaction;
   
-  const isMobile = useIsMobile();
   const isIncoming = type === 'incoming';
   const Icon = isIncoming ? ArrowDownLeft : ArrowUpRight;
   const amountColor = isIncoming ? 'text-green-500' : 'text-red-500';
@@ -91,12 +85,12 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
               <div className="flex items-center text-muted-foreground">
                 <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displaySenderName}</span>
                 {displaySenderUpiId && (
-                  <span className={`ml-1 ${showFullDetails || !isMobile ? 'inline' : 'hidden sm:inline'} truncate dark:text-gray-400`}>({displaySenderUpiId})</span>
+                  <span className="ml-1 hidden sm:inline truncate dark:text-gray-400">({displaySenderUpiId})</span>
                 )}
                 <ArrowRight className="h-3.5 w-3.5 mx-1 shrink-0 dark:text-gray-400" />
                 <span className="font-medium text-foreground truncate max-w-[80px] dark:text-gray-200">{displayReceiverName}</span>
                 {displayReceiverUpiId && (
-                  <span className={`ml-1 ${showFullDetails || !isMobile ? 'inline' : 'hidden sm:inline'} truncate dark:text-gray-400`}>({displayReceiverUpiId})</span>
+                  <span className="ml-1 hidden sm:inline truncate dark:text-gray-400">({displayReceiverUpiId})</span>
                 )}
               </div>
             </div>
@@ -112,4 +106,3 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
     </Card>
   );
 };
-
