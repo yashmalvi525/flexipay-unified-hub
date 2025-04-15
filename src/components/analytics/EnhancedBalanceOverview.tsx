@@ -17,27 +17,14 @@ export const EnhancedBalanceOverview: React.FC<EnhancedBalanceOverviewProps> = (
   balanceData,
   currentBalance
 }) => {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(amount).replace('₹', '₹');
-  };
-
   return (
     <Card className="w-full bg-[#F8F7FF] rounded-3xl border-none p-6">
-      <div className="flex flex-col space-y-1 mb-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-medium text-gray-800">Balance Overview</h3>
-          <p className="text-2xl font-medium text-gray-800">
-            {formatCurrency(currentBalance)}
-          </p>
-        </div>
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-medium text-gray-800">Balance Overview</h3>
+        <p className="text-2xl font-medium text-gray-800">₹{currentBalance.toLocaleString()}</p>
       </div>
 
-      <div className="h-[200px] mt-4">
+      <div className="h-[180px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={balanceData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
             <XAxis 
