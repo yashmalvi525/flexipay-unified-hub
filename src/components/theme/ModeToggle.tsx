@@ -20,8 +20,7 @@ export function ModeToggle() {
       variant="outline"
       size="sm"
       onClick={toggleTheme}
-      className="border-muted-foreground/20 hover:bg-muted dark:border-gray-700 dark:hover:bg-gray-800"
-      aria-label="Toggle theme"
+      className="border-muted-foreground/20 hover:bg-muted"
     >
       {theme === "dark" ? (
         <Sun className="h-5 w-5 text-yellow-400" />

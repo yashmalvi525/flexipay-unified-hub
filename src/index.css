@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,124 +6,92 @@
 @layer base {
   :root {
     --background: 250 33% 99%;
-    --foreground: 260 10% 3.9%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 252 33% 98%;
-    --card-foreground: 260 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 252 33% 98%;
-    --popover-foreground: 260 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     --primary: 258 49% 55%;
-    --primary-foreground: 252 33% 98%;
+    --primary-foreground: 0 0% 98%;
 
     --secondary: 196 77% 57%;
-    --secondary-foreground: 260 5.9% 10%;
+    --secondary-foreground: 240 5.9% 10%;
 
     --muted: 258 20% 96%;
-    --muted-foreground: 260 3.8% 46.1%;
+    --muted-foreground: 240 3.8% 46.1%;
 
     --accent: 258 20% 96%;
-    --accent-foreground: 260 5.9% 10%;
+    --accent-foreground: 240 5.9% 10%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 252 33% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 260 5.9% 90%;
-    --input: 260 5.9% 90%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
     --ring: 258 49% 55%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 252 33% 98%;
-    --sidebar-foreground: 260 5.3% 26.1%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 258 49% 55%;
-    --sidebar-primary-foreground: 252 33% 98%;
-    --sidebar-accent: 260 4.8% 95.9%;
-    --sidebar-accent-foreground: 260 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 258 49% 55%;
-
-    --flexipay-bg: #E5DEFF;
-    --flexipay-purple: #9b87f5;
-    --flexipay-blue: #33C3F0;
-    --flexipay-green: #00c853;
-    --flexipay-text: #6E59A5;
-  }
-
-  * {
-    @apply border-border;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html, body {
-    height: auto;
-    min-height: 100%;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: relative;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body {
-    @apply bg-flexipay-bg text-foreground;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  #root {
-    min-height: 100%;
-    height: auto;
-    overflow-y: auto;
   }
 
   .dark {
-    --background: 240 10% 4%;
+    --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
 
-    --card: 240 10% 8%;
+    --card: 24 9.8% 10%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 240 10% 6%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 258 49% 65%;
+    --primary: 258 49% 55%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 196 77% 57%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 74.9%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 240 10% 15%;
+    --accent: 12 6.5% 15.1%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 40.6%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
 
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 258 49% 65%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 258 49% 55%;
 
-    --sidebar-background: 240 10% 6%;
+    --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 258 49% 65%;
+    --sidebar-primary: 258 49% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 10% 15%;
+    --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 10% 15%;
-    --sidebar-ring: 258 49% 65%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 258 49% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
   }
 
-  button, a {
-    touch-action: manipulation;
-  }
-
-  input, textarea {
-    appearance: none;
-    -webkit-appearance: none;
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
@@ -148,7 +117,7 @@
   }
   
   .card-glass {
-    @apply backdrop-blur-sm bg-white/80 dark:bg-black/20 border border-white/20 shadow-lg;
+    @apply backdrop-blur-sm bg-white/80 border border-white/20 shadow-lg;
   }
   
   .card-animated {
@@ -166,111 +135,6 @@
   .shimmer {
     @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
   }
-
-  .tap-highlight {
-    @apply active:bg-gray-100 active:dark:bg-gray-800 transition-colors duration-100;
-  }
-  
-  .mobile-table {
-    @apply text-sm;
-  }
-  
-  .mobile-table th, 
-  .mobile-table td {
-    @apply py-2 px-2;
-  }
-  
-  .provider-logo {
-    @apply flex items-center justify-center h-6 w-6 rounded-full shrink-0 overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700;
-  }
-  
-  .dark .card-hover {
-    @apply hover:bg-gray-800;
-  }
-  
-  .dark .bg-gradient-primary {
-    @apply from-flexipay-purple to-flexipay-blue/80;
-  }
-  
-  .dark .card-glass {
-    @apply bg-gray-900/60 border-gray-700/50;
-  }
-
-  .upi-card {
-    @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 transition-all;
-  }
-
-  .upi-card-default {
-    @apply bg-gradient-to-br from-flexipay-light-purple to-white dark:from-flexipay-purple/20 dark:to-gray-800 border-flexipay-purple/30 dark:border-flexipay-purple/50;
-  }
-
-  .transaction-card {
-    @apply bg-white dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200;
-  }
-  
-  .transaction-sent {
-    @apply border-l-4 border-l-red-500 dark:border-l-red-600;
-  }
-  
-  .transaction-received {
-    @apply border-l-4 border-l-green-500 dark:border-l-green-600;
-  }
-
-  .upi-id-tag {
-    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300;
-  }
-
-  .provider-logo-gpay {
-    @apply bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400;
-  }
-  
-  .provider-logo-phonepe {
-    @apply bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400;
-  }
-  
-  .provider-logo-paytm {
-    @apply bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400;
-  }
-  
-  .provider-logo-bhim {
-    @apply bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400;
-  }
-  
-  /* Dark neon style components */
-  .neon-card {
-    @apply relative bg-flexipay-dark-card rounded-xl text-white overflow-hidden;
-  }
-  
-  .neon-card::before {
-    content: '';
-    @apply absolute inset-0 -z-10 rounded-xl p-[1.5px] bg-gradient-to-r from-flexipay-neon-purple via-flexipay-glow-purple to-transparent opacity-60;
-  }
-  
-  .neon-button {
-    @apply relative bg-flexipay-dark-bg text-flexipay-neon-purple rounded-lg border border-flexipay-neon-purple/30 hover:bg-flexipay-neon-purple/10 transition-all overflow-hidden;
-  }
-  
-  .neon-button::after {
-    content: '';
-    @apply absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-flexipay-neon-purple/5 to-transparent opacity-0 hover:opacity-30 transition-opacity;
-  }
-  
-  .glow-text {
-    text-shadow: 0 0 5px rgba(196, 165, 255, 0.7);
-  }
-  
-  .glow-border {
-    @apply border border-flexipay-neon-purple/50 shadow-[0_0_10px_rgba(196,165,255,0.3)];
-  }
-  
-  .feature-button {
-    @apply relative w-14 h-14 rounded-full flex items-center justify-center bg-flexipay-dark-bg hover:scale-105 transition-all duration-300;
-  }
-  
-  .feature-button::before {
-    content: '';
-    @apply absolute inset-0 rounded-full bg-gradient-to-br from-flexipay-neon-purple/30 to-transparent opacity-40 hover:opacity-80 transition-all;
-  }
 }
 
 @keyframes shimmer {
@@ -282,69 +146,5 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-  
-  .mobile-fixed {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .mobile-scroll {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    overscroll-behavior-y: none;
-  }
-  
-  .icon-align-fix {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .no-zoom {
-    touch-action: pan-x pan-y;
-  }
-
-  .dark-text-enhanced {
-    @apply text-gray-900 dark:text-gray-100;
-  }
-  
-  .dark-text-secondary {
-    @apply text-gray-700 dark:text-gray-300;
-  }
-  
-  .dark-text-muted {
-    @apply text-gray-500 dark:text-gray-400;
-  }
-
-  .logo-center {
-    @apply flex items-center justify-center;
-  }
-  
-  .logo-align-left {
-    @apply flex items-center justify-start;
-  }
-  
-  .align-text-icon {
-    @apply inline-flex items-center;
-  }
-  
-  .glow-effect {
-    @apply relative;
-  }
-  
-  .glow-effect::after {
-    content: '';
-    @apply absolute inset-0 rounded-xl bg-flexipay-neon-purple/20 blur-md opacity-0 transition-opacity hover:opacity-100;
-  }
-  
-  .glow-text-effect {
-    text-shadow: 0 0 8px rgba(196, 165, 255, 0.8);
-  }
-  
-  .glow-border-effect {
-    box-shadow: 0 0 10px 1px rgba(196, 165, 255, 0.3);
   }
 }

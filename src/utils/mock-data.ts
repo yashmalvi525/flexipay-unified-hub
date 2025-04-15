@@ -113,12 +113,12 @@ export const mockTransactions: Transaction[] = [
 
 // Mock balance data for charts
 export const mockBalanceData = [
-  { date: "Apr 1", amount: 15000 },
-  { date: "Apr 2", amount: 14200 },
-  { date: "Apr 3", amount: 16700 },
-  { date: "Apr 4", amount: 16100 },
-  { date: "Apr 5", amount: 18600 },
-  { date: "Apr 6", amount: 18100 }
+  { date: "Apr 1", balance: 15000 },
+  { date: "Apr 2", balance: 14200 },
+  { date: "Apr 3", balance: 16700 },
+  { date: "Apr 4", balance: 16100 },
+  { date: "Apr 5", balance: 18600 },
+  { date: "Apr 6", balance: 18100 }
 ];
 
 // Mock spending by UPI

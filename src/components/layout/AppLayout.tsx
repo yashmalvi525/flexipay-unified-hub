@@ -74,17 +74,17 @@ const AppSidebar = () => {
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full overflow-y-auto bg-flexipay-bg">
+      <div className="min-h-screen flex w-full">
         <AppSidebar />
-        <div className="flex-1 relative overflow-y-auto">
-          <div className="container mx-auto px-4 pb-16 md:pb-6">
-            <SidebarTrigger className="md:hidden mb-4">
+        <div className="flex-1 p-4 md:p-6">
+          <div className="container mx-auto px-4">
+            <SidebarTrigger className="md:hidden mb-4 focus:outline-none">
               <span className="sr-only">Toggle Menu</span>
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </SidebarTrigger>
-            <main className="pt-2">
+            <main className="pt-2 pb-16 md:pb-0">
               {children}
             </main>
           </div>

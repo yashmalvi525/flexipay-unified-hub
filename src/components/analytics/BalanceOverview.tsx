@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 
 interface BalanceData {
   date: string;
-  amount: number;
+  balance: number;
 }
 
 interface BalanceOverviewProps {
@@ -44,7 +44,7 @@ export const BalanceOverview: React.FC<BalanceOverviewProps> = ({ balanceData, c
               />
               <Line 
                 type="monotone" 
-                dataKey="amount" 
+                dataKey="balance" 
                 stroke="#7E69AB" 
                 strokeWidth={2}
                 dot={{ r: 4 }}

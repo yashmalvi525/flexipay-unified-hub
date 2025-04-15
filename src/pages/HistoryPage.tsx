@@ -4,36 +4,31 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { TransactionHistory } from '@/components/transactions/TransactionHistory';
 import { mockTransactions } from '@/utils/mock-data';
 import { Card, CardContent } from "@/components/ui/card";
-import { Tag, History, Filter, CalendarRange } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Tag } from 'lucide-react';
 
 const HistoryPage = () => {
-  const isMobile = useIsMobile();
-  
   return (
     <AppLayout>
-      <div className="mx-auto space-y-4 sm:space-y-6 animate-fade-in" 
-           style={{ width: '100%', maxWidth: "640px", touchAction: 'pan-y' }}>
-        <div className="flex items-center justify-between px-4 sm:px-0">
-          <h1 className="text-xl sm:text-2xl font-bold flex items-center">
-            <History className="h-6 w-6 mr-2 text-flexipay-purple dark:text-flexipay-light-purple" />
-            <span className="text-gradient-primary dark:text-white">
+      <div className="space-y-4 sm:space-y-6 animate-fade-in max-w-5xl mx-auto">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl sm:text-3xl font-bold">
+            <span className="text-gradient-primary">
               Transaction History
             </span>
           </h1>
           
-          <div className="flex items-center space-x-1 bg-gradient-to-r from-flexipay-purple to-flexipay-blue text-white rounded-full px-3 py-1.5 shadow-sm">
-            <CalendarRange className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-            <span className="text-xs font-medium">All Transactions</span>
+          <div className="flex items-center space-x-1 bg-muted rounded-full px-2 py-1 sm:px-3 sm:py-1">
+            <Tag className="h-3 w-3 sm:h-4 sm:w-4 text-flexipay-purple" />
+            <span className="text-xs font-medium">Detailed Logs</span>
           </div>
         </div>
         
-        <Card className="card-hover bg-gradient-to-r from-white to-flexipay-light-purple/5 border-flexipay-purple/20 overflow-hidden relative dark:from-gray-900 dark:to-flexipay-purple/10 dark:border-flexipay-purple/30 mx-2 sm:mx-0 shadow-md">
-          <div className="absolute -right-16 -top-16 w-48 h-48 bg-flexipay-blue/5 rounded-full blur-xl dark:bg-flexipay-blue/10"></div>
-          <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-purple/5 rounded-full blur-xl dark:bg-flexipay-purple/10"></div>
+        <Card className="card-hover bg-gradient-to-r from-white to-flexipay-light-purple/10 border-flexipay-purple/20 overflow-hidden relative">
+          <div className="absolute -right-16 -top-16 w-48 h-48 bg-flexipay-blue/5 rounded-full blur-xl"></div>
+          <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-flexipay-purple/5 rounded-full blur-xl"></div>
           
-          <CardContent className={`relative ${isMobile ? 'p-2 sm:p-3' : 'p-4 md:p-6'}`}>
-            <div className="overflow-x-hidden">
+          <CardContent className="p-3 sm:p-4 md:p-6 relative">
+            <div className="overflow-x-auto">
               <TransactionHistory transactions={mockTransactions} showFullDetails={true} />
             </div>
           </CardContent>
