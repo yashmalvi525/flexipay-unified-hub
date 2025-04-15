@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,72 +46,52 @@
   }
 
   .dark {
-    --background: 240 10% 4%;
+    --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
 
-    --card: 240 10% 8%;
+    --card: 24 9.8% 10%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 240 10% 6%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 258 49% 65%;
+    --primary: 258 49% 55%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 196 77% 57%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 10% 15%;
+    --muted: 0 0% 15%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 240 10% 15%;
+    --accent: 12 6.5% 15.1%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 40.6%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
 
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 258 49% 65%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 258 49% 55%;
 
-    --sidebar-background: 240 10% 6%;
+    --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 258 49% 65%;
+    --sidebar-primary: 258 49% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 10% 15%;
+    --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 10% 15%;
-    --sidebar-ring: 258 49% 65%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 258 49% 55%;
   }
+}
 
+@layer base {
   * {
     @apply border-border;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    overscroll-behavior: none;
-    touch-action: manipulation;
   }
 
   body {
     @apply bg-background text-foreground;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: touch;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  button, a {
-    touch-action: manipulation;
-  }
-
-  input, textarea {
-    appearance: none;
-    -webkit-appearance: none;
   }
 }
 
@@ -154,52 +135,6 @@
   .shimmer {
     @apply relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
   }
-
-  .tap-highlight {
-    @apply active:bg-gray-100 active:dark:bg-gray-800 transition-colors duration-100;
-  }
-  
-  .mobile-table {
-    @apply text-sm;
-  }
-  
-  .mobile-table th, 
-  .mobile-table td {
-    @apply py-2 px-2;
-  }
-  
-  .provider-logo {
-    @apply flex items-center justify-center h-4 w-4 rounded-full shrink-0;
-  }
-  
-  .dark .card-hover {
-    @apply hover:bg-foreground/5;
-  }
-  
-  .dark .bg-gradient-primary {
-    @apply from-flexipay-purple to-flexipay-blue/80;
-  }
-  
-  .dark .card-glass {
-    @apply bg-foreground/5 border-white/10;
-  }
-  
-  .animate-scan-line {
-    animation: scan-line 2s linear infinite;
-    box-shadow: 0 0 10px rgba(155, 135, 245, 0.5);
-  }
-}
-
-@keyframes scan-line {
-  0% {
-    top: 0%;
-  }
-  50% {
-    top: 100%;
-  }
-  100% {
-    top: 0%;
-  }
 }
 
 @keyframes shimmer {
@@ -211,28 +146,5 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-  
-  .mobile-fixed {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .mobile-scroll {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    overscroll-behavior-y: none;
-  }
-  
-  .icon-align-fix {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .no-zoom {
-    touch-action: pan-x pan-y;
   }
 }
