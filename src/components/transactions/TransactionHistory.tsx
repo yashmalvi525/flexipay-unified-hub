@@ -18,11 +18,13 @@ import {
 interface TransactionHistoryProps {
   transactions: Transaction[];
   compactView?: boolean;
+  showFullDetails?: boolean;
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ 
   transactions,
-  compactView = false 
+  compactView = false,
+  showFullDetails = false 
 }) => {
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -86,7 +88,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
         
         <div className="space-y-3">
           {filteredTransactions.slice(0, 5).map(transaction => (
-            <TransactionCard key={transaction.id} transaction={transaction} />
+            <TransactionCard key={transaction.id} transaction={transaction} showFullDetails={showFullDetails} />
           ))}
         </div>
       </div>
@@ -181,15 +183,15 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
 
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="bg-gradient-to-r from-flexipay-purple/10 to-flexipay-blue/10 p-1 w-full">
-          <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-white">All</TabsTrigger>
-          <TabsTrigger value="today" className="flex-1 data-[state=active]:bg-white">Today</TabsTrigger>
-          <TabsTrigger value="week" className="flex-1 data-[state=active]:bg-white">Week</TabsTrigger>
-          <TabsTrigger value="month" className="flex-1 data-[state=active]:bg-white">Month</TabsTrigger>
+          <TabsTrigger value="all" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">All</TabsTrigger>
+          <TabsTrigger value="today" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Today</TabsTrigger>
+          <TabsTrigger value="week" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Week</TabsTrigger>
+          <TabsTrigger value="month" className="flex-1 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">Month</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4 pt-4">
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map(transaction => (
-              <TransactionCard key={transaction.id} transaction={transaction} />
+              <TransactionCard key={transaction.id} transaction={transaction} showFullDetails={showFullDetails} />
             ))
           ) : (
             <div className="text-center py-12 bg-muted/30 rounded-lg">
@@ -226,3 +228,4 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
     </div>
   );
 };
+
