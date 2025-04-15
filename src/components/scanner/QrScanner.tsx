@@ -1,13 +1,19 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UpiSelector, UpiId } from '../upi/UpiSelector';
 import { useToast } from '@/hooks/use-toast';
+import QrReader from 'react-qr-scanner';
+import { Camera, RefreshCw, Ban } from 'lucide-react';
 
 interface QrScannerProps {
   upiIds: UpiId[];
+}
+
+interface ScanResult {
+  text: string;
 }
 
 export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
@@ -15,49 +21,167 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
   const [note, setNote] = useState('');
   const [selectedUpiId, setSelectedUpiId] = useState(upiIds[0]?.id || '');
   const [scanStage, setScanStage] = useState<'scan' | 'confirm'>('scan');
+  const [cameraActive, setCameraActive] = useState(false);
+  const [scannerError, setScannerError] = useState<string | null>(null);
+  const [merchantInfo, setMerchantInfo] = useState({ name: 'Merchant', id: 'merchant@upi' });
   const { toast } = useToast();
   
-  const handleScan = () => {
-    // In a real app, this would process the QR code scan
-    setScanStage('confirm');
+  const handleError = (err: Error) => {
+    console.error('QR Scanner error:', err);
+    setScannerError('Could not access camera. Please check permissions.');
+    toast({
+      title: "Camera Error",
+      description: "Could not access camera. Please check permissions.",
+      variant: "destructive"
+    });
   };
   
+  const handleScan = (data: ScanResult | null) => {
+    if (data && data.text) {
+      // In a real app, you would parse the UPI QR code data here
+      // For now, we'll simulate that we've found merchant details
+      
+      // Example QR content: upi://pay?pa=merchant@upi&pn=MerchantName&am=100
+      try {
+        const scannedData = data.text;
+        console.log('Scanned data:', scannedData);
+        
+        // Simple parsing for demo - in reality, use proper URI parsing
+        if (scannedData.includes('upi://pay')) {
+          // Parse merchant data
+          const merchantId = scannedData.includes('pa=') ? 
+            scannedData.split('pa=')[1].split('&')[0] : 'merchant@upi';
+          
+          const merchantName = scannedData.includes('pn=') ? 
+            scannedData.split('pn=')[1].split('&')[0] : 'Merchant';
+          
+          const scannedAmount = scannedData.includes('am=') ? 
+            scannedData.split('am=')[1].split('&')[0] : '';
+          
+          setMerchantInfo({
+            name: decodeURIComponent(merchantName),
+            id: merchantId
+          });
+          
+          if (scannedAmount) {
+            setAmount(scannedAmount);
+          }
+          
+          // Move to confirmation stage
+          setScanStage('confirm');
+          setCameraActive(false);
+        } else {
+          toast({
+            title: "Invalid QR Code",
+            description: "This doesn't appear to be a UPI QR code",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        console.error('Error parsing QR code:', error);
+        toast({
+          title: "QR Code Error",
+          description: "Could not process the QR code data",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
   const handlePayment = () => {
     // In a real app, this would process the payment
     toast({
       title: "Payment Successful",
-      description: `₹${amount} paid to Merchant using ${selectedUpiId}`,
+      description: `₹${amount} paid to ${merchantInfo.name} using ${selectedUpiId}`,
     });
     
     // Reset the form
     setAmount('');
     setNote('');
     setScanStage('scan');
+    setCameraActive(false);
   };
+
+  const retryCamera = () => {
+    setScannerError(null);
+    setCameraActive(true);
+  };
+  
+  const startScanner = () => {
+    setCameraActive(true);
+  };
+  
+  const cancelScan = () => {
+    setCameraActive(false);
+    if (scanStage === 'confirm') {
+      setScanStage('scan');
+    }
+  };
+  
+  // Clean up camera when component unmounts
+  useEffect(() => {
+    return () => {
+      setCameraActive(false);
+    };
+  }, []);
   
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Scan QR Code</CardTitle>
+        <CardTitle>{scanStage === 'scan' ? 'Scan QR Code' : 'Confirm Payment'}</CardTitle>
       </CardHeader>
       <CardContent>
         {scanStage === 'scan' ? (
           <div className="space-y-4">
-            <div className="aspect-square bg-flexipay-light-gray rounded-lg flex items-center justify-center border-2 border-dashed border-muted">
-              <div className="text-center">
-                <p className="text-muted-foreground">Position QR code in the frame</p>
-                {/* In a real app, this would be a camera view */}
-                <Button onClick={handleScan} className="btn-primary mt-4">
-                  Simulate Scan
-                </Button>
-              </div>
+            <div className="aspect-square bg-black rounded-lg flex items-center justify-center border-2 border-dashed border-muted relative overflow-hidden">
+              {cameraActive ? (
+                <>
+                  {!scannerError ? (
+                    <QrReader
+                      delay={300}
+                      onError={handleError}
+                      onScan={handleScan}
+                      constraints={{
+                        video: { facingMode: 'environment' }
+                      }}
+                      className="w-full h-full"
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    <div className="text-center p-4">
+                      <Ban className="h-12 w-12 text-destructive mx-auto mb-2" />
+                      <p className="text-destructive font-medium mb-2">{scannerError}</p>
+                      <Button variant="outline" onClick={retryCamera} className="mt-2">
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        Retry Camera
+                      </Button>
+                    </div>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm z-10"
+                    onClick={cancelScan}
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <div className="text-center p-6">
+                  <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground mb-4">Camera permission required to scan QR codes</p>
+                  <Button onClick={startScanner} className="btn-primary">
+                    Start Camera
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="p-4 bg-flexipay-light-purple rounded-lg text-center">
-              <h3 className="font-medium text-flexipay-purple">Merchant</h3>
-              <p className="text-sm text-muted-foreground">merchant@upi</p>
+            <div className="p-4 bg-flexipay-light-purple dark:bg-flexipay-purple/20 rounded-lg text-center">
+              <h3 className="font-medium text-flexipay-purple dark:text-flexipay-light-purple">{merchantInfo.name}</h3>
+              <p className="text-sm text-muted-foreground">{merchantInfo.id}</p>
             </div>
             
             <div>
@@ -68,6 +192,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Enter amount"
                 required
+                className="dark:bg-muted/30"
               />
             </div>
             
@@ -86,6 +211,7 @@ export const QrScanner: React.FC<QrScannerProps> = ({ upiIds }) => {
                 value={note} 
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Add a note"
+                className="dark:bg-muted/30"
               />
             </div>
           </div>

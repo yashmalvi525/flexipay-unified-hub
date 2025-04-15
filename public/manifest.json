@@ -1,0 +1,55 @@
+
+{
+  "name": "FlexiPay Unified Hub",
+  "short_name": "FlexiPay",
+  "description": "Fast and secure UPI payments",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "categories": ["finance", "payments"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scan QR",
+      "url": "/scan",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Send Money",
+      "url": "/pay-upi",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
