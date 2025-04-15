@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Card } from "@/components/ui/card";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 interface BalanceDataPoint {
   date: string;
@@ -22,56 +22,47 @@ export const EnhancedBalanceOverview: React.FC<EnhancedBalanceOverviewProps> = (
       style: 'currency',
       currency: 'INR',
       maximumFractionDigits: 0,
-    }).format(amount);
+      minimumFractionDigits: 0,
+    }).format(amount).replace('₹', '₹');
   };
 
   return (
-    <Card className="w-full bg-gradient-to-br from-[#E5DEFF] to-[#F1F0FB] border-[#9b87f5]/20">
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex flex-col space-y-1 mb-4">
-          <h3 className="text-lg sm:text-xl font-bold text-[#6E59A5]">Balance Overview</h3>
-          <p className="text-2xl sm:text-3xl font-bold text-[#9b87f5]">
+    <Card className="w-full bg-[#F8F7FF] rounded-3xl border-none p-6">
+      <div className="flex flex-col space-y-1 mb-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-medium text-gray-800">Balance Overview</h3>
+          <p className="text-2xl font-medium text-gray-800">
             {formatCurrency(currentBalance)}
           </p>
         </div>
+      </div>
 
-        <div className="h-[180px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={balanceData}>
-              <XAxis 
-                dataKey="date" 
-                tick={{ fontSize: 12, fill: '#6E59A5' }}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis 
-                tick={{ fontSize: 12, fill: '#6E59A5' }}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `₹${value}`}
-              />
-              <Tooltip 
-                formatter={(value) => [`₹${Number(value).toLocaleString()}`, 'Balance']}
-                labelFormatter={(label) => `Date: ${label}`}
-                contentStyle={{
-                  background: '#E5DEFF',
-                  border: '1px solid #9b87f5',
-                  borderRadius: '8px',
-                  color: '#6E59A5'
-                }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="amount" 
-                stroke="#9b87f5" 
-                strokeWidth={2}
-                dot={{ r: 4, fill: '#9b87f5' }}
-                activeDot={{ r: 6, fill: '#6E59A5' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
+      <div className="h-[200px] mt-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={balanceData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+            <XAxis 
+              dataKey="date" 
+              tick={{ fontSize: 12, fill: '#666' }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis 
+              tick={{ fontSize: 12, fill: '#666' }}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => `₹${value}`}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="amount" 
+              stroke="#7E69AB"
+              strokeWidth={2}
+              dot={{ r: 4, fill: '#7E69AB', strokeWidth: 0 }}
+              activeDot={{ r: 6, fill: '#7E69AB', strokeWidth: 0 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </Card>
   );
 };

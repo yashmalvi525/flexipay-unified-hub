@@ -13,13 +13,13 @@ import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-bold">Welcome to <span className="text-flexipay-purple">Flexi</span><span className="text-flexipay-blue">Pay</span></h1>
+    <div className="space-y-6 animate-fade-in p-4">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-medium">Welcome to <span className="text-[#7E69AB]">Flexi</span><span className="text-[#33C3F0]">Pay</span></h1>
       </div>
       
       {/* Balance Overview Card */}
-      <div className="bg-flexipay-dark-bg rounded-xl p-1 overflow-hidden">
+      <div className="rounded-3xl overflow-hidden">
         <EnhancedBalanceOverview balanceData={mockBalanceData} currentBalance={mockCurrentBalance} />
       </div>
       
