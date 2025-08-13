@@ -1,6 +1,6 @@
 
 
-````markdown
+
 # 🌟 About Us  
 We are **India’s First Youth-Oriented Tech Company**, proudly registered in **Vadodara, Gujarat**, with the vision to redefine how the next generation interacts with **technology, finance, and AI**.  
 
