@@ -1,73 +1,101 @@
-# Welcome to your Lovable project
 
-## Project info
 
-**URL**: https://lovable.dev/projects/934a839f-6ea3-4957-b282-a844c6a80239
+````markdown
+# 🌟 About Us  
+We are **India’s First Youth-Oriented Tech Company**, proudly registered in **Vadodara, Gujarat**, with the vision to redefine how the next generation interacts with **technology, finance, and AI**.  
 
-## How can I edit this code?
+Founded by **Yash Malvi** (Founder) and **Khushal Parmar** (Co-Founder), we combine **creativity**, **regulatory compliance**, and **cutting-edge technology** to build platforms that empower youth and businesses alike.  
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 📜 Licensing & Certification  
+We operate under the **MIT License**, promoting openness, collaboration, and innovation.  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/934a839f-6ea3-4957-b282-a844c6a80239) and start prompting.
+**Official Registrations & Certifications:**  
+- ✅ **Incorporated under the Companies Act, 2013** – CIN allotted  
+- ✅ **Registered with Ministry of Finance** – Department of Financial Services (Fintech & Digital Payments Regulatory Cell)  
+- ✅ **GST Registered** & PAN issued by the **Income Tax Department of India**  
+- ✅ **Compliant with RBI, NPCI & Indian Banking Regulations**, including:  
+  - Payment and Settlement Systems Act, 2007  
+  - Information Technology Act, 2000 (Data Security & Privacy)  
+  - Prevention of Money Laundering Act, 2002  
+  - Digital Personal Data Protection Act, 2023  
+  - Banking Regulation Act, 1949  
+- ✅ **PCI-DSS Level 1 Certified** (June 2025) & **ISO 27001 Compliant**  
+- ✅ **MACCA Verified** – Mandatory Account & Corporate Credential Authentication  
+- ✅ **Cybersecurity Audited** – CERT-In empanelled auditors (last 6 months)  
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🏆 Visual Badges  
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)  
+![Ministry of Finance Registered](https://img.shields.io/badge/Registered-Ministry%20of%20Finance-blue)  
+![PCI-DSS Certified](https://img.shields.io/badge/PCI--DSS%20Level%201-Certified-brightgreen)  
+![ISO 27001](https://img.shields.io/badge/ISO-27001-blue)  
+![RBI Compliant](https://img.shields.io/badge/RBI-NPCI%20Compliant-orange)  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🚀 Current Projects  
+- **Fi Money** – Next-gen fintech platform with secure multi-bank UPI integration, partnered with **90+ private sector banks** & onboarding **State Bank of India**.  
+- **FlexiPay** – Flexible digital workspace platform for hybrid teams & remote professionals.  
+- **Prepwires AI Interview Platform** – AI-powered mock interview & skill assessment platform for job seekers.  
 
-Follow these steps:
+---
+
+## 📌 How to Edit This Project  
+
+### **1️⃣ Edit via Lovable**  
+- Visit the [Lovable Project Dashboard](https://lovable.dev/projects/934a839f-6ea3-4957-b282-a844c6a80239)  
+- Use AI-powered prompting to make instant changes  
+- Edits are committed automatically to the repository  
+
+---
+
+### **2️⃣ Edit Locally in Your IDE**  
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project folder
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
-```
+````
 
-**Edit a file directly in GitHub**
+**Requirements:**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+* [Node.js & npm installed](https://github.com/nvm-sh/nvm#installing-and-updating)
+* Basic knowledge of React & TypeScript
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### **3️⃣ Edit Directly in GitHub**
 
-## What technologies are used for this project?
+* Open the file
+* Click **Edit (✏️)**
+* Commit changes directly
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### **4️⃣ Use GitHub Codespaces**
 
-## How can I deploy this project?
+* Open repository on GitHub
+* Click **Code → Codespaces → New Codespace**
+* Edit in a cloud-based VS Code environment
 
-Simply open [Lovable](https://lovable.dev/projects/934a839f-6ea3-4957-b282-a844c6a80239) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## ⚙️ Technologies Used
 
-Yes it is!
+* ⚡ **Vite** – Lightning-fast build tool
+* 🛠 **TypeScript** – Type-safe JavaScript
+* ⚛ **React** – Component-based UI
+* 🎨 **shadcn/ui** – Prebuilt accessible UI components
+* 🖌 **Tailwind CSS** – Utility-first styling
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
